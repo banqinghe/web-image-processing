@@ -1,0 +1,21 @@
+.horizon-resizable {
+  width: 100%;
+  height: 100%;
+  display: flex;
+}
+
+.horizon-item {
+  display: flex;
+  overflow: auto
+}
+
+.horizon-item > * {
+  flex: 1;
+}
+
+.horizon-divider {
+  width: 8px;
+  flex-shrink: 0;
+  cursor: col-resize;
+  background: #eee;
+}
