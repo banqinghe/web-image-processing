@@ -1,26 +1,40 @@
-import { useState } from 'react';
+import { useEffect } from 'react';
+import { monaco } from './monaco-editor.ts'
+
 import HorizonResizable from './components/HorizonResizable';
 import VerticalResizable from './components/VerticalResizable';
 
 import './App.css';
 
 function App() {
-  
-  // const [asideWidth, setAsideWidth] = useState('');
 
-  // function 
+  useEffect(() => {
+    window.editor = monaco.editor.create(document.getElementById('code-editor'), {
+      value: '',
+      language: 'javascript',
+      minimap: {
+        enabled: false,
+      },
+      automaticLayout: true,
+    });
+  }, []);
 
   const elements = [
     <aside className="tool-bar">
       <VerticalResizable elements={[
         <div>1</div>,
         <div>2</div>,
-        <div>3</div>,
+        <div className="code-editor-container">
+          <div className="code-editor-header">
+            {/* <button onClick={}>获取值</button> */}
+          </div>
+          <div id="code-editor"></div>,
+        </div>
       ]} />
     </aside>,
-    (<div className="canvas-container">
+    <div className="canvas-container">
       <canvas width="600" height="400"></canvas>
-    </div>),
+    </div>,
   ];
 
   return (
@@ -29,7 +43,7 @@ function App() {
         <button>文件</button>
       </div>
       <main className="main-body">
-        <HorizonResizable elements={elements} defaultWidthList={['25%', '75%']} />
+        <HorizonResizable elements={elements} defaultWidthList={['30%', '60%']} />
       </main>
     </div>
   );

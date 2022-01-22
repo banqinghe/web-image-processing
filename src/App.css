@@ -26,3 +26,16 @@
 /* .canvas-container {
   flex: 1;
 } */
+
+.code-editor-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.code-editor-container > .code-editor-header {
+  
+}
+
+.code-editor-container > #code-editor {
+  flex: 1;
+}
