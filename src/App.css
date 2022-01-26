@@ -1,16 +1,12 @@
-.header-bar {
-  height: 20px;
-  /* FIXME: 为什么不用 flex 不会自动垂直对齐 */
-  display: flex;
-  items-align: center;
-  box-sizing: border-box;
-  border-bottom: 1px solid #eee;
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
-.header-bar button {
-  height: 100%;
-  background: var(--gray-50);
+button {
   border: none;
+  background: #fff;
 }
 
 .main-body {

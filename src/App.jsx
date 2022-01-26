@@ -1,9 +1,12 @@
 import { useEffect } from 'react';
-import { monaco } from './monaco-editor.ts'
 
+import HeaderMenu from './components/HeaderMenu';
 import HorizonResizable from './components/HorizonResizable';
 import VerticalResizable from './components/VerticalResizable';
+import { monaco } from './monaco-editor'
 
+// TODO: import antd css
+// import 'antd/dist/antd.css';
 import './App.css';
 
 function App() {
@@ -39,9 +42,7 @@ function App() {
 
   return (
     <div className="app">
-      <div className="header-bar">
-        <button>文件</button>
-      </div>
+      <HeaderMenu />
       <main className="main-body">
         <HorizonResizable elements={elements} defaultWidthList={['30%', '60%']} />
       </main>
