@@ -1,8 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
+
+import { globalContext } from '../../store';
 import './index.css';
 import logoUrl from '../../assets/favicon.svg';
 
 function HeaderPopover() {
+  const { dispatch } = useContext(globalContext);
+
   const [activeItem, setActiveItem] = useState('');
 
   function handleClickWindow(e) {
@@ -23,6 +27,31 @@ function HeaderPopover() {
     };
   }, []);
 
+  async function handleSelectImage() {
+    const [fileHandle] = await window.showOpenFilePicker({
+      types: [
+        {
+          description: 'Image',
+          accept: {
+            'image/*': ['.png', '.jpg', '.jpeg', '.gif'],
+          }
+        }
+      ],
+      excludeAcceptAllOption: true,
+    });
+    const file = await fileHandle.getFile();
+    // console.log(file);
+    const fileReader = new FileReader();
+    fileReader.onload = () => {
+      dispatch({
+        type: 'image/new',
+        payload: fileReader.result,
+      });
+    };
+    fileReader.readAsDataURL(file);
+    setActiveItem('');
+  }
+
   return (
     <div className="header-menu">
       <img src={logoUrl} className="header-logo" alt="header-logo" />
@@ -33,7 +62,9 @@ function HeaderPopover() {
             className="header-submenu"
             style={{ display: activeItem === 'file' ? 'block' : 'none' }}
           >
-            <li className="header-submenu-item"><button>选择图片</button></li>
+            <li className="header-submenu-item">
+              <button onClick={handleSelectImage}>选择图片</button>
+            </li>
             <li className="header-submenu-item"><button>保存图片</button></li>
           </ul>
         </li>

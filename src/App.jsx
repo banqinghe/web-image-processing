@@ -3,7 +3,9 @@ import { useEffect } from 'react';
 import HeaderMenu from './components/HeaderMenu';
 import HorizonResizable from './components/HorizonResizable';
 import VerticalResizable from './components/VerticalResizable';
+import WebGLCanvas from './components/WebGLCanvas';
 import { monaco } from './monaco-editor'
+import { GlobalProvider } from './store';
 
 // TODO: import antd css
 // import 'antd/dist/antd.css';
@@ -35,18 +37,18 @@ function App() {
         </div>
       ]} />
     </aside>,
-    <div className="canvas-container">
-      <canvas width="600" height="400"></canvas>
-    </div>,
+    <WebGLCanvas />,
   ];
 
   return (
-    <div className="app">
-      <HeaderMenu />
-      <main className="main-body">
-        <HorizonResizable elements={elements} defaultWidthList={['30%', '60%']} />
-      </main>
-    </div>
+    <GlobalProvider>
+      <div className="app">
+        <HeaderMenu />
+        <main className="main-body">
+          <HorizonResizable elements={elements} defaultWidthList={['30%', '70%']} />
+        </main>
+      </div>
+    </GlobalProvider>
   );
 }
 

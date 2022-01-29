@@ -25,8 +25,6 @@ function HorizonResizable(props) {
     widthInfo.current.containerWidth = containerWidth;
     widthInfo.current.dividerWidth = dividerWidth;
 
-    console.log(widthInfo.current);
-
     const itemAverageWidth = (containerWidth - (elements.length - 1) * dividerWidth) / elements.length;
     elementRefList.forEach((elementRef, index) => {
       if (defaultWidthList) {

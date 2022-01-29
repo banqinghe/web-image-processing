@@ -25,8 +25,6 @@ function VerticalResizable(props) {
     heightInfo.current.containerHeight = containerHeight;
     heightInfo.current.dividerHeight = dividerHeight;
 
-    console.log(heightInfo.current);
-
     const itemAverageHeight = (containerHeight - (elements.length - 1) * dividerHeight) / elements.length;
     elementRefList.forEach((elementRef, index) => {
       if (defaultHeightList) {

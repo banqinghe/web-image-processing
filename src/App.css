@@ -19,10 +19,6 @@ button {
   /* max-width: 600px; */
 }
 
-/* .canvas-container {
-  flex: 1;
-} */
-
 .code-editor-container {
   display: flex;
   flex-direction: column;
