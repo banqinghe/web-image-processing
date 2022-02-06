@@ -1,0 +1,20 @@
+.toolbox {
+  padding: 6px 12px;
+}
+
+.toolbox ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+  gap: 10px;
+}
+
+.function-button {
+  padding: 5px 12px;
+  background: #f5f5f5;
+  border-radius: 4px;
+}
+
+.function-button:hover {
+  background: #efefef;
+  cursor: pointer;
+}

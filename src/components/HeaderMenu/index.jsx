@@ -4,7 +4,7 @@ import { globalContext } from '../../store';
 import './index.css';
 import logoUrl from '../../assets/favicon.svg';
 
-function HeaderPopover() {
+function HeaderMenu() {
   const { dispatch } = useContext(globalContext);
 
   const [activeItem, setActiveItem] = useState('');
@@ -76,4 +76,4 @@ function HeaderPopover() {
   )
 }
 
-export default HeaderPopover;
+export default HeaderMenu;

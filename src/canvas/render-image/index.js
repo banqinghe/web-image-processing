@@ -1,5 +1,5 @@
 import { initShaders } from '../utils';
-import vsText from './shader.vs?raw';
+import vsText from '../shader.vs?raw';
 import fsText from './shader.fs?raw';
 
 function initVertexBuffers(gl) {

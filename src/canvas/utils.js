@@ -43,3 +43,19 @@ export function initShaders(gl, vsText, fsText) {
   gl.useProgram(shaderProgram);
   return true;
 }
+
+/**
+ * loader image by url
+ */
+export function loadImage(url) {
+  const image = new Image();
+  return new Promise((resolve, reject) => {
+    image.onload = () => {
+      resolve(image);
+    };
+    image.onerror = () => {
+      reject('Failed to load image by url:', url);
+    };
+    image.src = url;
+  });
+}

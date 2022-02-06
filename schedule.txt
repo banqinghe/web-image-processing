@@ -16,3 +16,6 @@ Q：如何将 webgl 的内容转化为图片？
 A：在 getContext() 的时候添加 options preserveDrawingBuffer: true 即可使用 canvas.toBlob() 或 canvas.toDataURL() 方法获取截图。preserveDrawingBuffer 会使得 clear 画布得动作不会自动发生，也可以用来实现运动轨迹效果，但据说性能不好。
 
 Q: 如何引入模块、使用模块、叠加模块
+
+todo:
+- 处理模块叠加的撤销，不紧急
