@@ -1,5 +1,5 @@
 import React, { useReducer } from 'react';
-import defaultImageUrl from '../assets/hor.jpg';
+import defaultImageUrl from '../assets/Lenna.png';
 
 const initialState = {
   /** 图片原图 url */
@@ -68,7 +68,7 @@ function updateProcessModuleReducer(state, action) {
  function updateCurrentImageReducer(state, action) {
   return {
     ...state,
-    currentImageUrl: action.payload.currentImageUrl,
+    currentImageUrl: action.payload,
   };
 }
 

@@ -10,6 +10,7 @@
 2021.1.3  创建 repo（canvas-image），使用 Vite + React
 2021.1.15 完成了 resizable 组件 
 2021.1.30 canvas 渲染图片，尺寸自适应
+2021.2.9  sobel 和 prewitt 边缘检测模块
 
 notes: 
 Q：如何将 webgl 的内容转化为图片？
@@ -19,3 +20,4 @@ Q: 如何引入模块、使用模块、叠加模块
 
 todo:
 - 处理模块叠加的撤销，不紧急
+- 编辑器代码安全问题

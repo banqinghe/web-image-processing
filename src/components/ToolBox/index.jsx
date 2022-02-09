@@ -2,8 +2,11 @@ import { useContext } from 'react';
 import { globalContext } from '../../store';
 import grayscale from '../../canvas/grayscale';
 import thresholding from '../../canvas/thresholding';
-import './index.css';
+import sobel from '../../canvas/sobel';
+import prewitt from '../../canvas/prewitt';
 import { loadImage } from '../../canvas/utils';
+
+import './index.css';
 
 function FunctionButton(props) {
   const {
@@ -51,6 +54,12 @@ function ToolBox() {
         </li>
         <li>
           <FunctionButton text="二值化" processFn={thresholding} moduleName="thresholding" />
+        </li>
+        <li>
+          <FunctionButton text="Sobel" processFn={sobel} moduleName="sobel" />
+        </li>
+        <li>
+          <FunctionButton text="Prewitt" processFn={prewitt} moduleName="prewitt" />
         </li>
       </ul> 
     </div>
