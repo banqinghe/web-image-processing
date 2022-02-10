@@ -6,6 +6,8 @@ import './index.css';
 const componentMap = {
   'grayscale': React.lazy(() => import('../../canvas/grayscale/Support')),
   'thresholding': React.lazy(() => import('../../canvas/thresholding/Support')),
+  'blur': React.lazy(() => import('../../canvas/blur/Support')),
+  'sharpen': React.lazy(() => import('../../canvas/sharpen/Support')),
 };
 
 function SupportComponentContainer() {
@@ -15,7 +17,7 @@ function SupportComponentContainer() {
     dispatch({
       type: 'canvas/updateCurrentImage',
       payload: state.ctx.canvas.toDataURL(),
-    })
+    });
   }
 
   if (!componentMap[state.processModule.name]) {
@@ -34,7 +36,6 @@ function SupportComponentContainer() {
       </Suspense>
     </div>
   );
-  return <div></div>
 }
 
 export default SupportComponentContainer;

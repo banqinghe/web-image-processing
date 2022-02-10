@@ -25,8 +25,7 @@ void main() {
 
   /* calculate the convolution values for all the masks */
   for(int i = 0; i < 2; i++) {
-    float dp3 = dot(G[i][0], I[0]) + dot(G[i][1], I[1]) + dot(G[i][2], I[2]);
-    cnv[i] = dp3;
+    cnv[i] = dot(G[i][0], I[0]) + dot(G[i][1], I[1]) + dot(G[i][2], I[2]);
   }
 
   float result = sqrt(cnv[0] * cnv[0] + cnv[1] * cnv[1]);
