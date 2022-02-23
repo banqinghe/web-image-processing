@@ -1,8 +1,18 @@
 .toolbox {
-  padding: 6px 12px;
+
+}
+
+.toolbox-title {
+  padding: 2px 6px;
+  flex-shrink: 0;
+  background: #f7f7f7;
+  color: #644;
+  font-size: 12px;
+  font-weight: bold;
 }
 
 .toolbox ul {
+  padding: 6px 12px;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
   gap: 10px;
@@ -17,5 +27,4 @@
 
 .function-button:hover {
   background: #efefef;
-  cursor: pointer;
 }

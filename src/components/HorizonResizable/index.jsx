@@ -3,8 +3,10 @@ import { useEffect, useRef } from 'react';
 import './index.css';
 
 function HorizonResizable(props) {
-  const { elements, defaultWidthList } = props;
-  const elementRefList = Array.from({ length: elements.length }, () => useRef());
+  const { defaultWidthList, children } = props;
+  const elementRefList = Array.from({ length: children.length }, () => useRef());
+
+  // console.log(children, elements);
 
   const widthInfo = useRef({
     containerWidth: -1,
@@ -25,17 +27,17 @@ function HorizonResizable(props) {
     widthInfo.current.containerWidth = containerWidth;
     widthInfo.current.dividerWidth = dividerWidth;
 
-    const itemAverageWidth = (containerWidth - (elements.length - 1) * dividerWidth) / elements.length;
+    const itemAverageWidth = (containerWidth - (children.length - 1) * dividerWidth) / children.length;
     elementRefList.forEach((elementRef, index) => {
       if (defaultWidthList) {
         elementRef.current.style.width = defaultWidthList[index];
         return;
       }
       elementRef.current.style.width = (
-        index < elements.length - 1 ? itemAverageWidth + dividerWidth : itemAverageWidth
+        index < children.length - 1 ? itemAverageWidth + dividerWidth : itemAverageWidth
       ) / containerWidth * 100 + '%';
     });
-  }, [elements]);
+  }, [children]);
 
   function resizeItem(e) {
     if (!movingInfo.current.isMoving ||
@@ -58,13 +60,13 @@ function HorizonResizable(props) {
   }
 
   const toRender = [];
-  elements.forEach((element, index) => {
+  children.forEach((element, index) => {
     toRender.push(
       <div className="horizon-item" key={index * 2} ref={elementRefList[index]}>
         {element}
       </div>
     );
-    if (index < elements.length - 1) {
+    if (index < children.length - 1) {
       toRender.push(
         <div
           className="horizon-divider"

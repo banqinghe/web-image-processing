@@ -40,12 +40,15 @@ function HeaderMenu() {
       excludeAcceptAllOption: true,
     });
     const file = await fileHandle.getFile();
-    // console.log(file);
     const fileReader = new FileReader();
     fileReader.onload = () => {
       dispatch({
-        type: 'image/new',
-        payload: fileReader.result,
+        type: 'image/updateInfo',
+        payload: {
+          url: fileReader.result,
+          name: file.name,
+          fileSize: file.size,
+        },
       });
     };
     fileReader.readAsDataURL(file);
@@ -68,6 +71,7 @@ function HeaderMenu() {
             <li className="header-submenu-item"><button>保存图片</button></li>
           </ul>
         </li>
+        <li className="header-menu-item"><button>语言</button></li>
         <li className="header-menu-item">
           <button onClick={() => console.log('canvas image by bqh')}>关于</button>
         </li>

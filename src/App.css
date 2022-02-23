@@ -9,25 +9,15 @@ button {
   background: #fff;
 }
 
+button:hover {
+  cursor: pointer;
+}
+
+p {
+  margin: 0;
+}
+
 .main-body {
   width: 100vw;
   height: calc(100vh - 20px);
-}
-
-.tool-bar {
-  flex-shrink: 0;
-  /* max-width: 600px; */
-}
-
-.code-editor-container {
-  display: flex;
-  flex-direction: column;
-}
-
-.code-editor-container > .code-editor-header {
-  
-}
-
-.code-editor-container > #code-editor {
-  flex: 1;
 }

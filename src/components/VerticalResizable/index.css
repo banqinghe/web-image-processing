@@ -16,8 +16,11 @@
 }
 
 .vertical-divider {
-  height: 8px;
+  padding: 2px 6px;
   flex-shrink: 0;
   cursor: row-resize;
-  background: #eee;
+  background: #f7f7f7;
+  color: #644;
+  font-size: 12px;
+  font-weight: bold;
 }

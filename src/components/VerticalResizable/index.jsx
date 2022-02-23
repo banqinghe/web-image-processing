@@ -3,8 +3,8 @@ import { useEffect, useRef } from 'react';
 import './index.css';
 
 function VerticalResizable(props) {
-  const { elements, defaultHeightList } = props;
-  const elementRefList = Array.from({ length: elements.length }, () => useRef());
+  const { children, defaultHeightList, dividerText } = props;
+  const elementRefList = Array.from({ length: children.length }, () => useRef());
 
   const heightInfo = useRef({
     containerHeight: -1,
@@ -25,17 +25,17 @@ function VerticalResizable(props) {
     heightInfo.current.containerHeight = containerHeight;
     heightInfo.current.dividerHeight = dividerHeight;
 
-    const itemAverageHeight = (containerHeight - (elements.length - 1) * dividerHeight) / elements.length;
+    const itemAverageHeight = (containerHeight - (children.length - 1) * dividerHeight) / children.length;
     elementRefList.forEach((elementRef, index) => {
       if (defaultHeightList) {
         elementRef.current.style.height = defaultHeightList[index];
         return;
       }
       elementRef.current.style.height = (
-        index < elements.length - 1 ? itemAverageHeight + dividerHeight : itemAverageHeight
+        index < children.length - 1 ? itemAverageHeight + dividerHeight : itemAverageHeight
       ) / containerHeight * 100 + '%';
     });
-  }, [elements]);
+  }, [children]);
 
   function resizeItem(e) {
     if (!movingInfo.current.isMoving ||
@@ -58,13 +58,13 @@ function VerticalResizable(props) {
   }
 
   const toRender = [];
-  elements.forEach((element, index) => {
+  children.forEach((element, index) => {
     toRender.push(
       <div className="vertical-item" key={index * 2} ref={elementRefList[index]}>
         {element}
       </div>
     );
-    if (index < elements.length - 1) {
+    if (index < children.length - 1) {
       toRender.push(
         <div
           className="vertical-divider"
@@ -79,7 +79,9 @@ function VerticalResizable(props) {
             window.addEventListener('mousemove', resizeItem);
             window.addEventListener('mouseup', resizeFinish, { once: true });
           }}
-        />
+        >
+          {dividerText && dividerText[index]}
+        </div>
       );
     }
   });

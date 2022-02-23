@@ -1,5 +1,102 @@
+.process-window {
+  display: flex;
+}
+
 #canvas-container {
+  position: relative;
+  flex: 1 1 0%;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+#canvas-container > .origin-image-mask {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: -1;
+}
+
+#canvas-container > .origin-image-mask.visible {
+  display: flex;
+  z-index: 1;
+}
+
+.image-info-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  background: #fff;
+  border-top: 1px solid #eee;
+  font-size: 12px;
+  cursor: default;
+  user-select: none;
+}
+
+.image-info-bar > span {
+  padding: 0 8px;
+  border-left: 1px solid #eee;
+}
+
+.canvas-info-sidebar {
+  width: 280px;
+  padding: 20px 15px;
+  border-left: 2px solid #eee;
+  overflow-y: auto;
+}
+
+.canvas-info-sidebar > .info-item {
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+}
+
+.canvas-info-sidebar > .info-item > .info-item-title {
+  margin-right: 8px;
+}
+
+.canvas-info-sidebar > .info-item:not(:last-child) {
+  margin-bottom: 18px;
+}
+
+.canvas-info-sidebar > .info-item.module-list {
+  display: block;
+  font-family: 'Consolas';
+}
+
+.canvas-info-sidebar > .info-item.module-list > ul {
+  /* display: grid;
+  grid-template-columns: 1fr 1fr; */
+  padding: 10px 0 0 12px;
+  list-style-type: disc;
+  font-size: 12px;
+}
+
+.canvas-info-sidebar > .info-item.module-list > ul > li {
+  padding: 2px 8px;
+}
+
+.canvas-info-sidebar > .info-item.module-list > ul > li:hover {
+  background: #f5f5f5;
+}
+
+.canvas-info-sidebar > .info-item > .reset-btn {
+  padding: 3px 12px;
+  margin-top: 8px;
+  background: #f5f5f5;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.canvas-info-sidebar > .info-item > .reset-btn:hover {
+  background: #efefef;
 }

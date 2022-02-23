@@ -53,6 +53,7 @@ function FunctionButton(props) {
 function ToolBox() {
   return (
     <div className="toolbox">
+      <div className="toolbox-title">工具栏</div>
       <ul>
         <li>
           <FunctionButton text="转灰度" processFn={grayscale} moduleName="grayscale" />

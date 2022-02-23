@@ -4,16 +4,33 @@ import defaultImageUrl from '../assets/Lenna.png';
 const initialState = {
   /** 图片原图 url */
   imageUrl: defaultImageUrl,
+
+  /** 图片信息 */
+  imageInfo: {
+    url: defaultImageUrl,
+    name: 'DEFAULT',
+    fileSize: 462 * 2 ** 10,
+    imageSize: '512×512',
+  },
+
   /** 处理后的图片 url */
   currentImageUrl: defaultImageUrl,
+
+  /** 使用 canvas 2d 或 webgl 上下文, 'canvas' | 'webgl' */
+  mode: 'webgl',
+
   /** 当前 canvas context */
   ctx: null,
+
   /** 当前使用的模块信息 */
   processModule: {
     name: '',
     originImage: null,
-    processFn: () => {},
+    processFn: () => { },
   },
+
+  /** 当前叠加的处理模块, { name: string; repeat: number } */
+  moduleList: [],
 };
 
 export const globalContext = React.createContext();
@@ -21,14 +38,34 @@ export const globalContext = React.createContext();
 /**
  * 
  * @param {object} state 
- * @param {{ type: string; payload: string }} action payload 为新导入图片的 url
+ * @param {{ 
+ *   type: string;
+ *   payload: {
+ *     url: string;
+ *     name: string;
+ *     fileSize: number;
+ *     imageSize: string;
+ *   }
+ * }} action payload 为新导入图片的 url
  * @returns state
  */
 function selectNewImageReducer(state, action) {
+  const {
+    url,
+    name,
+    fileSize,
+    imageSize,
+  } = action.payload;
   return {
     ...state,
-    imageUrl: action.payload,
-    currentImageUrl: action.payload,
+    imageInfo: {
+      url,
+      name,
+      fileSize,
+      imageSize,
+    },
+    imageUrl: url,
+    currentImageUrl: url,
   };
 }
 
@@ -38,7 +75,7 @@ function selectNewImageReducer(state, action) {
  * @param {{ type: string; payload: WebGL2RenderingContext }} action
  * @returns state
  */
- function updateCtxReducer(state, action) {
+function updateCtxReducer(state, action) {
   return {
     ...state,
     ctx: action.payload,
@@ -52,10 +89,40 @@ function selectNewImageReducer(state, action) {
  * @returns state
  */
 function updateProcessModuleReducer(state, action) {
+  const {
+    currentImageUrl,
+    processModule,
+  } = action.payload;
+
+  const newModuleList = [...state.moduleList];
+
+  if (
+    state.moduleList.length > 0 &&
+    processModule.name === state.moduleList[state.moduleList.length - 1].name
+  ) {
+    const topModule = newModuleList[newModuleList.length - 1];
+    newModuleList[newModuleList.length - 1] = { name: topModule.name, repeat: topModule.repeat + 1 };
+  } else {
+    newModuleList.push({ name: processModule.name, repeat: 0 });
+  }
+
   return {
     ...state,
-    currentImageUrl: action.payload.currentImageUrl,
-    processModule: action.payload.processModule,
+    currentImageUrl: currentImageUrl,
+    processModule: processModule,
+    moduleList: newModuleList,
+  };
+}
+
+function resetModuleReducer(state, action) {
+  return {
+    ...state,
+    moduleList: [],
+    processModule: {
+      name: '',
+      originImage: null,
+      processFn: () => { },
+    },
   };
 }
 
@@ -65,23 +132,40 @@ function updateProcessModuleReducer(state, action) {
  * @param {{ type: string; payload: string }} action
  * @returns state
  */
- function updateCurrentImageReducer(state, action) {
+function updateCurrentImageReducer(state, action) {
   return {
     ...state,
     currentImageUrl: action.payload,
   };
 }
 
+/**
+ * 
+ * @param {object} state 
+ * @param {{ type: string; payload: string }} action
+ * @returns state
+ */
+function changeModeReducer(state, action) {
+  return {
+    ...state,
+    mode: action.payload,
+  };
+}
+
 function reducer(state, action) {
   switch (action.type) {
-    case 'image/new':
+    case 'image/updateInfo':
       return selectNewImageReducer(state, action);
     case 'canvas/updateProcessModule':
       return updateProcessModuleReducer(state, action);
+    case 'canvas/resetProcessModule':
+      return resetModuleReducer(state, action);
     case 'canvas/updateCtx':
       return updateCtxReducer(state, action);
     case 'canvas/updateCurrentImage':
       return updateCurrentImageReducer(state, action);
+    case 'canvas/changeMode':
+      return changeModeReducer(state, action);
   }
   return state;
 }
