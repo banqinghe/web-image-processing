@@ -20,7 +20,7 @@
 .guide-modal .key-word {
   background: #f5f5f5;
   padding: 2px 8px;
-  margin-right: 6px;
+  margin: 0 6px;
   border-radius: 6px;
   color: #511;
   font-family: Consolas, monospace;

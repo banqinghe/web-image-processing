@@ -9,11 +9,11 @@ import hljs from 'highlight.js';
 import './index.css';
 import 'highlight.js/styles/vs.css';
 
-const highlight = hljs.highlight;
+// const highlight = hljs.highlight;
 
 const editorGuide = (
   <>
-    <p>在编辑器中，你可以访问与图片有关的三个变量，分别为：</p>
+    <p>在编辑器中声明名为<span className="key-word">run</span>的函数即可对图像进行操作，该函数将会被传入三个与图片有关的变量，分别为：</p>
     <ul className="list">
       <li><span className="key-word">width: number</span>，图片宽度（高度与宽度单位均为像素）。</li>
       <li><span className="key-word">height: number</span>，图片高度。</li>
@@ -24,6 +24,7 @@ const editorGuide = (
         <span className="key-word">rgba</span>值范围均为<span className="key-word">[0, 255]</span>。
       </li>
     </ul>
+    <p><span className="key-word">run</span>函数需要返回与第三个参数相同的数据结构以输出新的图像。</p>
     {/* <p>在渲染模式为<span className="key-word">Canvas</span>时，你可以通过修改<span className="key-word">pixels</span>数组中的像素值来对当前已加载的图像进行修改。
       以下为一个实现图片二值化的简单 demo：
     </p>

@@ -4,7 +4,6 @@ import WebGLCanvas from './components/WebGLCanvas';
 import ToolSideBar from './components/ToolSideBar';
 import { GlobalProvider } from './store';
 
-// TODO: import antd css
 import 'antd/dist/antd.css';
 import './App.css';
 
@@ -16,7 +15,7 @@ function App() {
         <main className="main-body">
           <HorizonResizable defaultWidthList={['30%', '70%']}>
             <ToolSideBar />
-            <WebGLCanvas />,
+            <WebGLCanvas />
           </HorizonResizable>
         </main>
       </div>

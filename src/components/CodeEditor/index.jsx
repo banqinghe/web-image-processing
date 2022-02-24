@@ -33,6 +33,17 @@ function CodeEditor() {
     const source = editor.current.getValue();
     const processFn = new Function('ctx', preCode + source + sufCode);
     processFn(state.ctx);
+    dispatch({
+      type: 'canvas/updateProcessModule',
+      payload: {
+        currentImageUrl: state.ctx.canvas.toDataURL(),
+        processModule: {
+          name: 'custom',
+          originImage: null,
+          processFn: null,
+        }
+      },
+    });
   }
 
   return (

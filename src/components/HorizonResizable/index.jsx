@@ -6,8 +6,6 @@ function HorizonResizable(props) {
   const { defaultWidthList, children } = props;
   const elementRefList = Array.from({ length: children.length }, () => useRef());
 
-  // console.log(children, elements);
-
   const widthInfo = useRef({
     containerWidth: -1,
     dividerWidth: -1,

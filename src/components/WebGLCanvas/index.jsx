@@ -17,6 +17,7 @@ const moduleChineseNameDict = {
   'erosion': '腐蚀',
   'blur': '模糊',
   'sharpen': '锐化',
+  'custom': '编辑器自定义',
 };
 
 function WebGLCanvas() {
@@ -37,14 +38,6 @@ function WebGLCanvas() {
   // canvas 元素大小自适应
   function updateCanvasDom(image) {
     const { width, height } = image;
-
-    dispatch({
-      type: 'image/updateInfo',
-      payload: {
-        ...state.imageInfo,
-        imageSize: width + '×' + height,
-      },
-    });
 
     if (canvasRef.current) {
       canvasRef.current.remove();
@@ -76,9 +69,13 @@ function WebGLCanvas() {
       ctx = canvasRef.current.getContext('webgl2', { preserveDrawingBuffer: true });
       renderImageGl(ctx, image);
     }
+
     dispatch({
       type: 'canvas/updateCtx',
-      payload: ctx,
+      payload: {
+        imageSize: width + '×' + height,
+        ctx,
+      },
     });
   };
 

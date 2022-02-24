@@ -76,16 +76,31 @@ function selectNewImageReducer(state, action) {
  * @returns state
  */
 function updateCtxReducer(state, action) {
+  const { ctx, imageSize } = action.payload;
   return {
     ...state,
-    ctx: action.payload,
+    ctx,
+    imageInfo: {
+      ...state.imageInfo,
+      imageSize,
+    },
   };
 }
 
 /**
  * 
  * @param {object} state 
- * @param {{ type: string; payload: { currentImageUrl: string; processModule: string } }} action
+ * @param {{
+ *  type: string;
+ *  payload: {
+ *    currentImageUrl: string;
+ *    processModule: {
+ *      name: string;
+ *      originImage: Image;
+ *      processFn: function;
+ *    }
+ *  }
+ * }} action
  * @returns state
  */
 function updateProcessModuleReducer(state, action) {
@@ -108,8 +123,8 @@ function updateProcessModuleReducer(state, action) {
 
   return {
     ...state,
-    currentImageUrl: currentImageUrl,
-    processModule: processModule,
+    currentImageUrl,
+    processModule,
     moduleList: newModuleList,
   };
 }

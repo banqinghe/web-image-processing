@@ -22,7 +22,6 @@ function FunctionButton(props) {
   const { state, dispatch } = useContext(globalContext);
 
   function handleClick() {
-    // console.log(state);
     loadImage(state.currentImageUrl)
       .then(image => {
         // 1. process image
