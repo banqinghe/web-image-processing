@@ -1,5 +1,5 @@
 import React, { useReducer } from 'react';
-import defaultImageUrl from '../assets/Lenna.png';
+import defaultImageUrl from '../assets/demo.jpg';
 
 const initialState = {
   /** 图片原图 url */
@@ -9,8 +9,8 @@ const initialState = {
   imageInfo: {
     url: defaultImageUrl,
     name: 'DEFAULT',
-    fileSize: 462 * 2 ** 10,
-    imageSize: '512×512',
+    fileSize: 45265,
+    imageSize: '800×1050',
   },
 
   /** 处理后的图片 url */
@@ -132,6 +132,7 @@ function updateProcessModuleReducer(state, action) {
 function resetModuleReducer(state, action) {
   return {
     ...state,
+    currentImageUrl: state.imageUrl,
     moduleList: [],
     processModule: {
       name: '',
