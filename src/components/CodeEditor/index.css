@@ -57,3 +57,22 @@
 .code-editor-menu > button:active {
   background: #e1e1e1;
 }
+
+.save-code-popover .ant-popover-inner-content {
+  padding: 0;
+}
+
+.save-code-popover .ant-popover-arrow {
+  display: none;
+}
+
+.save-code-popover button {
+  display: block;
+  width: 100%;
+  padding: 6px 12px;
+  font-size: 13px;
+}
+
+.save-code-popover button:hover {
+  background: #efefef;
+}

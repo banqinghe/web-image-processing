@@ -43,11 +43,14 @@
   background: #fff;
   border: 1px solid #eee;
   font-size: 13px;
+  z-index: 1000;
 }
 
 .header-submenu-item > button {
+  width: 100%;
   padding: 4px 14px;
   font-size: 13px;
+  text-align: left;
 }
 
 .header-submenu-item > button:hover {

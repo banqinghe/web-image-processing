@@ -31,6 +31,10 @@ const initialState = {
 
   /** 当前叠加的处理模块, { name: string; repeat: number } */
   moduleList: [],
+
+  /** 当前存储的用户自定义模块 */
+  savedModuleList: window.localStorage.getItem('custom-modules') ?
+    JSON.parse(window.localStorage.getItem('custom-modules')) : [],
 };
 
 export const globalContext = React.createContext();
@@ -66,6 +70,7 @@ function selectNewImageReducer(state, action) {
     },
     imageUrl: url,
     currentImageUrl: url,
+    moduleList: [],
   };
 }
 
@@ -118,7 +123,7 @@ function updateProcessModuleReducer(state, action) {
     const topModule = newModuleList[newModuleList.length - 1];
     newModuleList[newModuleList.length - 1] = { name: topModule.name, repeat: topModule.repeat + 1 };
   } else {
-    newModuleList.push({ name: processModule.name, repeat: 0 });
+    newModuleList.push({ name: processModule.name, repeat: 1 });
   }
 
   return {
@@ -168,6 +173,24 @@ function changeModeReducer(state, action) {
   };
 }
 
+/**
+ * 
+ * @param {object} state 
+ * @param {{ type: string; payload: string }} action
+ * @returns state
+ */
+ function saveNewModuleReducer(state, action) {
+  const newSavedModuleList = [...state.savedModuleList];
+  if (!state.savedModuleList.includes(action.payload)) {
+    newSavedModuleList.push(action.payload);
+  }
+  window.localStorage.setItem('custom-modules',JSON.stringify(newSavedModuleList));
+  return {
+    ...state,
+    savedModuleList: newSavedModuleList,
+  };
+}
+
 function reducer(state, action) {
   switch (action.type) {
     case 'image/updateInfo':
@@ -182,6 +205,8 @@ function reducer(state, action) {
       return updateCurrentImageReducer(state, action);
     case 'canvas/changeMode':
       return changeModeReducer(state, action);
+    case 'module/saveCustom':
+      return saveNewModuleReducer(state, action);
   }
   return state;
 }

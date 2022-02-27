@@ -148,8 +148,8 @@ function WebGLCanvas() {
           <ul>
             {state.moduleList.map((module, index) => (
               <li key={index}>
-                {moduleChineseNameDict[module.name]}
-                {module.repeat ? ' (×' + module.repeat + ')' : ''}
+                {moduleChineseNameDict[module.name] ?? module.name}
+                {module.repeat > 1 ? ' (×' + module.repeat + ')' : ''}
               </li>
             ))}
           </ul>

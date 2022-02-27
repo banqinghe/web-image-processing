@@ -27,7 +27,7 @@ function HeaderMenu() {
     };
   }, []);
 
-  async function handleSelectImage() {
+  async function handleImportImage() {
     const [fileHandle] = await window.showOpenFilePicker({
       types: [
         {
@@ -55,6 +55,28 @@ function HeaderMenu() {
     setActiveItem('');
   }
 
+  async function handleImportModule() {
+    const [fileHandle] = await window.showOpenFilePicker({
+      types: [
+        {
+          description: 'JavaScript File',
+          accept: {
+            'application/javascript': ['.js'],
+          }
+        }
+      ],
+      excludeAcceptAllOption: true,
+    });
+    const file = await fileHandle.getFile();
+    const fileReader = new FileReader();
+    fileReader.onload = () => {
+      window.editor.setValue(fileReader.result);
+      console.log(fileReader.result);
+    };
+    fileReader.readAsText(file);
+    setActiveItem('');
+  }
+
   return (
     <div className="header-menu">
       <img src={logoUrl} className="header-logo" alt="header-logo" />
@@ -66,9 +88,11 @@ function HeaderMenu() {
             style={{ display: activeItem === 'file' ? 'block' : 'none' }}
           >
             <li className="header-submenu-item">
-              <button onClick={handleSelectImage}>选择图片</button>
+              <button onClick={handleImportImage}>导入图片</button>
             </li>
-            <li className="header-submenu-item"><button>保存图片</button></li>
+            <li className="header-submenu-item">
+              <button onClick={handleImportModule}>导入自定义模块</button>
+            </li>
           </ul>
         </li>
         <li className="header-menu-item"><button>语言</button></li>

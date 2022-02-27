@@ -1,4 +1,6 @@
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import ReactDOM from 'react-dom';
+import { message } from 'antd';
 import { globalContext } from '../../store';
 import grayscale from '../../canvas/grayscale';
 import thresholding from '../../canvas/thresholding';
@@ -11,6 +13,10 @@ import blur from '../../canvas/blur';
 import sharpen from '../../canvas/sharpen';
 import { loadImage } from '../../canvas/utils';
 
+import { runCustomModule } from '../../utils/custom-module';
+import { getCustomModule } from '../../utils/idb';
+import { climbToWindow } from '../../utils/dom';
+
 import './index.css';
 
 function FunctionButton(props) {
@@ -22,6 +28,9 @@ function FunctionButton(props) {
   const { state, dispatch } = useContext(globalContext);
 
   function handleClick() {
+    if (state.mode !== 'webgl') {
+      return;
+    }
     loadImage(state.currentImageUrl)
       .then(image => {
         // 1. process image
@@ -49,7 +58,75 @@ function FunctionButton(props) {
   );
 }
 
+function ModuleContextMenu(props) {
+  const { visible, moduleName, x, y } = props.status;
+  const { onCancel, onDelete, onImport } = props;
+
+  function handleClickWindow(e) {
+    climbToWindow(
+      e.target,
+      el => el.classList.contains('module-context-menu'),
+      onCancel,
+    );
+  }
+
+  useEffect(() => {
+    window.addEventListener('click', handleClickWindow);
+    return () => {
+      window.removeEventListener('click', handleClickWindow)
+    }
+  }, []);
+
+  return ReactDOM.createPortal(
+    <div
+      className={'module-context-menu' + (visible ? ' visible' : '')}
+      style={{ top: y, left: x }}
+    >
+      <button onClick={onDelete}>删除</button>
+      <button onClick={onImport}>显示源代码</button>
+    </div>,
+    document.body
+  );
+}
+
 function ToolBox() {
+  const { state, dispatch } = useContext(globalContext);
+
+  const [contextMenu, setContextMenu] = useState({ visible: false, moduleName: '' });
+
+  async function handleRunCustomModule(moduleName) {
+    if (state.mode !== 'canvas') {
+      message.info('自定义模块需在 Canvas 模式执行');
+      return;
+    }
+    const code = await getCustomModule(moduleName);
+    runCustomModule(state.ctx, code);
+    dispatch({
+      type: 'canvas/updateProcessModule',
+      payload: {
+        currentImageUrl: state.ctx.canvas.toDataURL(),
+        processModule: {
+          name: moduleName,
+          originImage: null,
+          processFn: null,
+        },
+      },
+    });
+  }
+
+  async function handleContextMenu(e, moduleName) {
+    e.preventDefault();
+    setContextMenu({ visible: true, moduleName, x: e.clientX, y: e.clientY });
+  }
+
+  function handleDeleteModule() {
+    setContextMenu(prev => ({ ...prev, visible: false }));
+  }
+
+  function handleImportSource() {
+    setContextMenu(prev => ({ ...prev, visible: false }));
+  }
+
   return (
     <div className="toolbox">
       <div className="toolbox-title">工具栏</div>
@@ -81,7 +158,30 @@ function ToolBox() {
         <li>
           <FunctionButton text="锐化" processFn={sharpen} moduleName="sharpen" />
         </li>
-      </ul> 
+      </ul>
+      {state.savedModuleList.length > 0 &&
+        <div className="custom-module-title"><span>自定义模块</span></div>
+      }
+      <ul id="saved-module-list">
+        {state.savedModuleList.map(name => (
+          <li key={name}>
+            <button
+              className="function-button"
+              onClick={() => handleRunCustomModule(name)}
+              onContextMenu={e => handleContextMenu(e, name)}
+            >
+              {name}
+            </button>
+          </li>
+        ))}
+      </ul>
+
+      <ModuleContextMenu
+        status={contextMenu}
+        onDelete={handleDeleteModule}
+        onImport={handleImportSource}
+        onCancel={() => setContextMenu(prev => ({ ...prev, visible: false }))}
+      />
     </div>
   );
 }
