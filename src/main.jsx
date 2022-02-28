@@ -4,6 +4,7 @@ import './index.css'
 import App from './App'
 
 import { registerSW } from 'virtual:pwa-register';
+import CanvasWorker from './canvas-worker?worker';
 
 const intervalMS = 60 * 60 * 1000;
 
@@ -23,7 +24,9 @@ const updateSW = registerSW({
     console.log('offline ready');
     // alert('offline ready')
   },
-})
+});
+
+window.canvasWorker = new CanvasWorker();
 
 ReactDOM.render(
   <App />,

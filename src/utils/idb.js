@@ -1,4 +1,4 @@
-import { set, get, update } from 'idb-keyval';
+import { set, get, update, del } from 'idb-keyval';
 
 const modulePrefix = 'MODULE-';
 const fileHandleKey = 'FILE_HANDLE';
@@ -15,6 +15,13 @@ function setCustomModule(name, code) {
  */
 function getCustomModule(name) {
   return get(modulePrefix + name);
+}
+
+/**
+ * 删除保存的模块
+ */
+function deleteCustomModule(name) {
+  return del(modulePrefix + name);
 }
 
 /**
@@ -35,5 +42,6 @@ function unshiftFileHandleList(handle) {
 export {
   setCustomModule,
   getCustomModule,
+  deleteCustomModule,
   unshiftFileHandleList,
 };

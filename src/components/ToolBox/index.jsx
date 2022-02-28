@@ -14,7 +14,7 @@ import sharpen from '../../canvas/sharpen';
 import { loadImage } from '../../canvas/utils';
 
 import { runCustomModule } from '../../utils/custom-module';
-import { getCustomModule } from '../../utils/idb';
+import { deleteCustomModule, getCustomModule } from '../../utils/idb';
 import { climbToWindow } from '../../utils/dom';
 
 import './index.css';
@@ -60,7 +60,7 @@ function FunctionButton(props) {
 
 function ModuleContextMenu(props) {
   const { visible, moduleName, x, y } = props.status;
-  const { onCancel, onDelete, onImport } = props;
+  const { onCancel, onDelete, onImport, onExecute } = props;
 
   function handleClickWindow(e) {
     climbToWindow(
@@ -82,6 +82,7 @@ function ModuleContextMenu(props) {
       className={'module-context-menu' + (visible ? ' visible' : '')}
       style={{ top: y, left: x }}
     >
+      <button onClick={onExecute}>执行</button>
       <button onClick={onDelete}>删除</button>
       <button onClick={onImport}>显示源代码</button>
     </div>,
@@ -94,24 +95,22 @@ function ToolBox() {
 
   const [contextMenu, setContextMenu] = useState({ visible: false, moduleName: '' });
 
+  function hiddenContextMenu() {
+    setContextMenu(prev => ({ ...prev, visible: false }));
+  }
+
   async function handleRunCustomModule(moduleName) {
+    if (contextMenu.visible) {
+      hiddenContextMenu();
+    }
+
     if (state.mode !== 'canvas') {
       message.info('自定义模块需在 Canvas 模式执行');
       return;
     }
+
     const code = await getCustomModule(moduleName);
-    runCustomModule(state.ctx, code);
-    dispatch({
-      type: 'canvas/updateProcessModule',
-      payload: {
-        currentImageUrl: state.ctx.canvas.toDataURL(),
-        processModule: {
-          name: moduleName,
-          originImage: null,
-          processFn: null,
-        },
-      },
-    });
+    runCustomModule(state.ctx, code, dispatch, message.info);
   }
 
   async function handleContextMenu(e, moduleName) {
@@ -120,11 +119,20 @@ function ToolBox() {
   }
 
   function handleDeleteModule() {
-    setContextMenu(prev => ({ ...prev, visible: false }));
+    hiddenContextMenu();
+    deleteCustomModule(contextMenu.moduleName);
+    dispatch({
+      type: 'module/deleteCustom',
+      payload: contextMenu.moduleName,
+    });
   }
 
   function handleImportSource() {
-    setContextMenu(prev => ({ ...prev, visible: false }));
+    hiddenContextMenu();
+    getCustomModule(contextMenu.moduleName)
+      .then(code => {
+        window.editor.setValue(code);
+      });
   }
 
   return (
@@ -159,6 +167,7 @@ function ToolBox() {
           <FunctionButton text="锐化" processFn={sharpen} moduleName="sharpen" />
         </li>
       </ul>
+
       {state.savedModuleList.length > 0 &&
         <div className="custom-module-title"><span>自定义模块</span></div>
       }
@@ -180,7 +189,8 @@ function ToolBox() {
         status={contextMenu}
         onDelete={handleDeleteModule}
         onImport={handleImportSource}
-        onCancel={() => setContextMenu(prev => ({ ...prev, visible: false }))}
+        onExecute={() => handleRunCustomModule(contextMenu.moduleName)}
+        onCancel={hiddenContextMenu}
       />
     </div>
   );

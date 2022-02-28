@@ -174,21 +174,37 @@ function changeModeReducer(state, action) {
 }
 
 /**
- * 
+ * 保存新的自定义处理模块
  * @param {object} state 
  * @param {{ type: string; payload: string }} action
  * @returns state
  */
- function saveNewModuleReducer(state, action) {
+function saveNewModuleReducer(state, action) {
   const newSavedModuleList = [...state.savedModuleList];
   if (!state.savedModuleList.includes(action.payload)) {
     newSavedModuleList.push(action.payload);
   }
-  window.localStorage.setItem('custom-modules',JSON.stringify(newSavedModuleList));
+  window.localStorage.setItem('custom-modules', JSON.stringify(newSavedModuleList));
   return {
     ...state,
     savedModuleList: newSavedModuleList,
   };
+}
+
+/**
+ * 删除保存的自定义处理模块
+ * @param {object} state 
+ * @param {{ type: string; payload: string }} action
+ * @returns state
+ */
+function deleteModuleReducer(state, action) {
+  const moduleName = action.payload;
+  const newSavedModuleList = state.savedModuleList.filter(name => name !== moduleName);
+  window.localStorage.setItem('custom-modules', JSON.stringify(newSavedModuleList));
+  return {
+    ...state,
+    savedModuleList: newSavedModuleList,
+  }
 }
 
 function reducer(state, action) {
@@ -207,6 +223,8 @@ function reducer(state, action) {
       return changeModeReducer(state, action);
     case 'module/saveCustom':
       return saveNewModuleReducer(state, action);
+    case 'module/deleteCustom':
+      return deleteModuleReducer(state, action);
   }
   return state;
 }

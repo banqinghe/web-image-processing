@@ -1,15 +1,13 @@
-import { useContext, useEffect, useRef, useState } from 'react';
-import { Popover, Modal, Input } from 'antd';
-import { get, set } from 'idb-keyval';
+import { useContext, useEffect, useState } from 'react';
+import { Popover, Modal, Input, message } from 'antd';
 import { globalContext } from '../../store';
 import { getNewFileHandle, writeFile } from '../../utils/file';
 import { monaco } from '../../monaco-editor';
-import preCode from './pre-code?raw';
-import sufCode from './suf-code?raw';
+import { setCustomModule } from '../../utils/idb';
+import { runCustomModule } from '../../utils/custom-module';
 import demoCode from './demo-code?raw';
 
 import './index.css';
-import { setCustomModule } from '../../utils/idb';
 
 function CodeEditor() {
   const { state, dispatch } = useContext(globalContext);
@@ -20,14 +18,16 @@ function CodeEditor() {
   const [customModuleName, setCustomModuleName] = useState('');
 
   useEffect(() => {
-    window.editor = monaco.editor.create(document.getElementById('code-editor'), {
-      value: demoCode,
-      language: 'javascript',
-      tabSize: 2,
-      minimap: { enabled: false },
-      automaticLayout: true,
-      fontSize: 13,
-    });
+    if (!window.editor) {
+      window.editor = monaco.editor.create(document.getElementById('code-editor'), {
+        value: demoCode,
+        language: 'javascript',
+        tabSize: 2,
+        minimap: { enabled: false },
+        automaticLayout: true,
+        fontSize: 13,
+      });
+    }
   }, []);
 
   function handleClickRun() {
@@ -35,19 +35,7 @@ function CodeEditor() {
       return;
     }
     const source = window.editor.getValue();
-    const processFn = new Function('ctx', preCode + source + sufCode);
-    processFn(state.ctx);
-    dispatch({
-      type: 'canvas/updateProcessModule',
-      payload: {
-        currentImageUrl: state.ctx.canvas.toDataURL(),
-        processModule: {
-          name: 'custom',
-          originImage: null,
-          processFn: null,
-        }
-      },
-    });
+    runCustomModule(state.ctx, source, dispatch, message.info);
   }
 
   // 将自定义代码保存为文件
@@ -57,7 +45,6 @@ function CodeEditor() {
   }
 
   function handleClickSaveAsModule() {
-    console.log(customModuleName);
     setCustomModule(customModuleName, window.editor.getValue());
     dispatch({
       type: 'module/saveCustom',
