@@ -6,6 +6,7 @@
  * @param {Function} info 
  */
 function runCustomModule(ctx, code, dispatch, info) {
+  console.log('invoke run custom module');
   console.time('run custom module');
   const canvas = ctx.canvas;
   const { width, height } = canvas;
@@ -57,17 +58,19 @@ function runCustomModule(ctx, code, dispatch, info) {
 
   console.timeEnd('run custom module');
 
-  dispatch({
-    type: 'canvas/updateProcessModule',
-    payload: {
-      currentImageUrl: ctx.canvas.toDataURL(),
-      // originImage 和 processFn 用于 SupportComponent，自定义模块无需使用
-      processModule: {
-        name: 'custom',
-        originImage: null,
-        processFn: null,
-      }
-    },
+  ctx.canvas.toBlob(blob => {
+    dispatch({
+      type: 'canvas/updateProcessModule',
+      payload: {
+        currentImageUrl: URL.createObjectURL(blob),
+        // originImage 和 processFn 用于 SupportComponent，自定义模块无需使用
+        processModule: {
+          name: 'custom',
+          originImage: null,
+          processFn: null,
+        }
+      },
+    });
   });
 
   // 使用 web worker，但是效率很低

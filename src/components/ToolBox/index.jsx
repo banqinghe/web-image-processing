@@ -35,18 +35,22 @@ function FunctionButton(props) {
       .then(image => {
         // 1. process image
         // 2. save module info
+        console.time('process');
         processFn(state.ctx, image);
-        dispatch({
-          type: 'canvas/updateProcessModule',
-          payload: {
-            currentImageUrl: state.ctx.canvas.toDataURL(),
-            processModule: {
-              name: moduleName,
-              originImage: image,
-              processFn,
+        state.ctx.canvas.toBlob(blob => {
+          dispatch({
+            type: 'canvas/updateProcessModule',
+            payload: {
+              currentImageUrl: URL.createObjectURL(blob),
+              processModule: {
+                name: moduleName,
+                originImage: image,
+                processFn,
+              },
             },
-          },
+          });
         });
+        console.timeEnd('process');
       })
       .catch(console.error);
   }
