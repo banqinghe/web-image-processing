@@ -35,9 +35,19 @@ function FunctionButton(props) {
       .then(image => {
         // 1. process image
         // 2. save module info
-        console.time('process');
+
         processFn(state.ctx, image);
+
+        // ------------ PERFORMANCE TEST BEGIN: toBlob duration ------------
+        let startTime = performance.now();
+
         state.ctx.canvas.toBlob(blob => {
+          // FIXME: 导致重置原图图片无法加载
+          // URL.revokeObjectURL(state.currentImageUrl);
+
+          console.log('load blob duration:', performance.now() - startTime);
+          // ---------------- PERFORMANCE TEST END ----------------
+
           dispatch({
             type: 'canvas/updateProcessModule',
             payload: {
@@ -50,7 +60,6 @@ function FunctionButton(props) {
             },
           });
         });
-        console.timeEnd('process');
       })
       .catch(console.error);
   }

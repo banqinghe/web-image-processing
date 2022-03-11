@@ -80,7 +80,7 @@ function WebGLCanvas() {
   };
 
   function renderOriginImage() {
-    loadImage(state.imageUrl)
+    loadImage(state.imageInfo.url)
       .then(updateCanvasDom)
       .catch(console.error);
   }
@@ -99,7 +99,7 @@ function WebGLCanvas() {
     renderOriginImage();
   }
 
-  useEffect(renderOriginImage, [state.imageUrl]);
+  useEffect(renderOriginImage, [state.imageInfo.url]);
   useEffect(renderCurrentImage, [state.mode]);
 
   return (
@@ -109,7 +109,7 @@ function WebGLCanvas() {
         <div className={'origin-image-mask' + (originImageVisible ? ' visible' : '')}>
           <img
             width={canvasRef.current ? canvasRef.current.style.width : undefined}
-            src={state.imageUrl}
+            src={state.imageInfo.url}
             alt="原图"
           />
         </div>

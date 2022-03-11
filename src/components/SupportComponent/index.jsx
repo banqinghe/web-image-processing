@@ -14,9 +14,11 @@ function SupportComponentContainer() {
   const { state, dispatch } = useContext(globalContext);
 
   function handleProcessComplete() {
-    dispatch({
-      type: 'canvas/updateCurrentImage',
-      payload: state.ctx.canvas.toDataURL(),
+    state.ctx.canvas.toBlob(blob => {
+      dispatch({
+        type: 'canvas/updateCurrentImage',
+        payload: URL.createObjectURL(blob),
+      });
     });
   }
 

@@ -40,18 +40,14 @@ function HeaderMenu() {
       excludeAcceptAllOption: true,
     });
     const file = await fileHandle.getFile();
-    const fileReader = new FileReader();
-    fileReader.onload = () => {
-      dispatch({
-        type: 'image/updateInfo',
-        payload: {
-          url: fileReader.result,
-          name: file.name,
-          fileSize: file.size,
-        },
-      });
-    };
-    fileReader.readAsDataURL(file);
+    dispatch({
+      type: 'image/updateInfo',
+      payload: {
+        url: URL.createObjectURL(file),
+        name: file.name,
+        fileSize: file.size,
+      },
+    });
     setActiveItem('');
   }
 
