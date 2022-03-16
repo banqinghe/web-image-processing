@@ -1,16 +1,26 @@
-import { precacheAndRoute, cleanupOutdatedCaches } from "workbox-precaching";
-import { clientsClaim } from 'workbox-core'
+importScripts(
+  'https://storage.googleapis.com/workbox-cdn/releases/6.1.5/workbox-sw.js'
+);
 
-cleanupOutdatedCaches();
+workbox.setConfig({
+  debug: true,
+});
 
-precacheAndRoute(self.__WB_MANIFEST);
+workbox.precaching.precacheAndRoute(self.__WB_MANIFEST);
 
-self.skipWaiting();
-clientsClaim();
+workbox.routing.registerRoute(
+  new RegExp('.*\\.(?:js)'),
+  new workbox.strategies.NetworkFirst()
+);
 
-self.addEventListener('message', e => {
-  console.log('sw message', e);
-  if (e.data && e.data.type === 'SKIP_WAITING') {
-    self.skipWaiting();
-  }
-})
+workbox.routing.registerRoute(
+  new RegExp('.*\\.(?:png|jpg|jpeg|svg|gif)'),
+  new workbox.strategies.CacheFirst({
+    cacheName: 'image-cache',
+    plugins: [
+      new workbox.expiration.ExpirationPlugin({
+        maxEntries: 3,
+      }),
+    ],
+  })
+);

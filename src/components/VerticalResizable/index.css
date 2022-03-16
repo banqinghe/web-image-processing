@@ -3,12 +3,13 @@
   height: 100%;
   display: flex;
   flex-direction: column;
+  background: var(--bg-color);
 }
 
 .vertical-item {
   display: flex;
   flex-direction: column;
-  overflow: auto
+  overflow: auto;
 }
 
 .vertical-item > * {
@@ -19,8 +20,8 @@
   padding: 2px 6px;
   flex-shrink: 0;
   cursor: row-resize;
-  background: #f7f7f7;
-  color: #644;
+  background: var(--divider-bg);
+  color: var(--divider-text);
   font-size: 12px;
   font-weight: bold;
 }

@@ -20,15 +20,12 @@ import { climbToWindow } from '../../utils/dom';
 import './index.css';
 
 function FunctionButton(props) {
-  const {
-    text,
-    processFn,
-    moduleName,
-  } = props;
+  const { text, processFn, moduleName } = props;
   const { state, dispatch } = useContext(globalContext);
 
   function handleClick() {
     if (state.mode !== 'webgl') {
+      message.info('预设模块需在 WebGL 模式执行');
       return;
     }
     loadImage(state.currentImageUrl)
@@ -79,15 +76,15 @@ function ModuleContextMenu(props) {
     climbToWindow(
       e.target,
       el => el.classList.contains('module-context-menu'),
-      onCancel,
+      onCancel
     );
   }
 
   useEffect(() => {
     window.addEventListener('click', handleClickWindow);
     return () => {
-      window.removeEventListener('click', handleClickWindow)
-    }
+      window.removeEventListener('click', handleClickWindow);
+    };
   }, []);
 
   return ReactDOM.createPortal(
@@ -106,7 +103,10 @@ function ModuleContextMenu(props) {
 function ToolBox() {
   const { state, dispatch } = useContext(globalContext);
 
-  const [contextMenu, setContextMenu] = useState({ visible: false, moduleName: '' });
+  const [contextMenu, setContextMenu] = useState({
+    visible: false,
+    moduleName: '',
+  });
 
   function hiddenContextMenu() {
     setContextMenu(prev => ({ ...prev, visible: false }));
@@ -142,10 +142,9 @@ function ToolBox() {
 
   function handleImportSource() {
     hiddenContextMenu();
-    getCustomModule(contextMenu.moduleName)
-      .then(code => {
-        window.editor.setValue(code);
-      });
+    getCustomModule(contextMenu.moduleName).then(code => {
+      window.editor.setValue(code);
+    });
   }
 
   return (
@@ -153,37 +152,67 @@ function ToolBox() {
       <div className="toolbox-title">工具栏</div>
       <ul>
         <li>
-          <FunctionButton text="转灰度" processFn={grayscale} moduleName="grayscale" />
+          <FunctionButton
+            text="转灰度"
+            processFn={grayscale}
+            moduleName="grayscale"
+          />
         </li>
         <li>
-          <FunctionButton text="二值化" processFn={thresholding} moduleName="thresholding" />
+          <FunctionButton
+            text="二值化"
+            processFn={thresholding}
+            moduleName="thresholding"
+          />
         </li>
         <li>
-          <FunctionButton text="反色" processFn={invertColor} moduleName="invert-color" />
+          <FunctionButton
+            text="反色"
+            processFn={invertColor}
+            moduleName="invert-color"
+          />
         </li>
         <li>
           <FunctionButton text="Sobel" processFn={sobel} moduleName="sobel" />
         </li>
         <li>
-          <FunctionButton text="Prewitt" processFn={prewitt} moduleName="prewitt" />
+          <FunctionButton
+            text="Prewitt"
+            processFn={prewitt}
+            moduleName="prewitt"
+          />
         </li>
         <li>
-          <FunctionButton text="膨胀" processFn={dilation} moduleName="dilation" />
+          <FunctionButton
+            text="膨胀"
+            processFn={dilation}
+            moduleName="dilation"
+          />
         </li>
         <li>
-          <FunctionButton text="腐蚀" processFn={erosion} moduleName="erosion" />
+          <FunctionButton
+            text="腐蚀"
+            processFn={erosion}
+            moduleName="erosion"
+          />
         </li>
         <li>
           <FunctionButton text="模糊" processFn={blur} moduleName="blur" />
         </li>
         <li>
-          <FunctionButton text="锐化" processFn={sharpen} moduleName="sharpen" />
+          <FunctionButton
+            text="锐化"
+            processFn={sharpen}
+            moduleName="sharpen"
+          />
         </li>
       </ul>
 
-      {state.savedModuleList.length > 0 &&
-        <div className="custom-module-title"><span>自定义模块</span></div>
-      }
+      {state.savedModuleList.length > 0 && (
+        <div className="custom-module-title">
+          <span>自定义模块</span>
+        </div>
+      )}
       <ul id="saved-module-list">
         {state.savedModuleList.map(name => (
           <li key={name}>

@@ -7,8 +7,8 @@
   top: 0;
   padding: 2px 6px;
   flex-shrink: 0;
-  background: #f7f7f7;
-  color: #644;
+  background: var(--divider-bg);
+  color: var(--divider-text);
   font-size: 12px;
   font-weight: bold;
 }
@@ -23,12 +23,12 @@
 .function-button {
   width: 100%;
   padding: 5px 12px;
-  background: #f5f5f5;
+  background: var(--btn-bg);
   border-radius: 4px;
 }
 
 .function-button:hover {
-  background: #efefef;
+  background: var(--btn-hover-bg);
 }
 
 .custom-module-title {
@@ -40,7 +40,7 @@
   display: inline-block;
   padding: 0 8px;
   line-height: 24px;
-  background: #f7f7f7;
+  background: var(--tltle-bg);
   font-size: 13px;
 }
 
@@ -67,5 +67,5 @@
 }
 
 .module-context-menu button:hover {
-  background: #efefef;
+  background: var(--btn-hover-bg);
 }

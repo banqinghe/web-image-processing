@@ -19,14 +19,17 @@ function CodeEditor() {
 
   useEffect(() => {
     if (!window.editor) {
-      window.editor = monaco.editor.create(document.getElementById('code-editor'), {
-        value: demoCode,
-        language: 'javascript',
-        tabSize: 2,
-        minimap: { enabled: false },
-        automaticLayout: true,
-        fontSize: 13,
-      });
+      window.editor = monaco.editor.create(
+        document.getElementById('code-editor'),
+        {
+          value: demoCode,
+          language: 'javascript',
+          tabSize: 2,
+          minimap: { enabled: false },
+          automaticLayout: true,
+          fontSize: 13,
+        }
+      );
     }
   }, []);
 
@@ -55,9 +58,6 @@ function CodeEditor() {
 
   return (
     <div className="code-editor-container">
-      <div className="code-editor-header">
-        {/* <span>编辑器</span> */}
-      </div>
       <div id="code-editor"></div>
       <div className="code-editor-menu">
         <button
@@ -74,9 +74,12 @@ function CodeEditor() {
           content={
             <div className="popover-card">
               <button onClick={handleClickSaveAsFile}>文件</button>
-              <button onClick={() => setSaveModalVisible(true)}>自定义模块</button>
+              <button onClick={() => setSaveModalVisible(true)}>
+                自定义模块
+              </button>
             </div>
-          }>
+          }
+        >
           <button type="button" className="save">
             保存为
           </button>
@@ -92,7 +95,7 @@ function CodeEditor() {
         cancelText="取消"
         onCancel={() => setSaveModalVisible(false)}
       >
-        <Input 
+        <Input
           placeholder="模块名称"
           value={customModuleName}
           onChange={e => setCustomModuleName(e.target.value)}

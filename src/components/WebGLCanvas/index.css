@@ -1,5 +1,6 @@
 .process-window {
   display: flex;
+  background: var(--bg-color);
 }
 
 #canvas-container {
@@ -35,8 +36,8 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  background: #fff;
-  border-top: 1px solid #eee;
+  background: var(--bg-color);
+  border-top: 1px solid var(--divider-bg);
   font-size: 12px;
   cursor: default;
   user-select: none;
@@ -44,13 +45,13 @@
 
 .image-info-bar > span {
   padding: 0 8px;
-  border-left: 1px solid #eee;
+  border-left: 1px solid var(--divider-bg);
 }
 
 .canvas-info-sidebar {
   width: 280px;
   padding: 20px 15px;
-  border-left: 2px solid #eee;
+  border-left: 2px solid var(--divider-bg);
   overflow-y: auto;
 }
 
@@ -86,17 +87,17 @@
 }
 
 .canvas-info-sidebar > .info-item.module-list > ul > li:hover {
-  background: #f5f5f5;
+  background: var(--btn-hover-bg);
 }
 
 .canvas-info-sidebar > .info-item > .reset-btn {
   padding: 3px 12px;
   margin-top: 8px;
-  background: #f5f5f5;
+  background: var(--btn-bg);
   border-radius: 4px;
   font-size: 12px;
 }
 
 .canvas-info-sidebar > .info-item > .reset-btn:hover {
-  background: #efefef;
+  background: var(--btn-hover-bg);
 }

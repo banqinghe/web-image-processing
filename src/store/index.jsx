@@ -1,5 +1,6 @@
 import React, { useReducer } from 'react';
 import defaultImageUrl from '../assets/demo.jpg';
+import localLanguageResource from '../i18n/resource.json';
 
 const initialState = {
   /** 图片原图 url */
@@ -26,23 +27,31 @@ const initialState = {
   processModule: {
     name: '',
     originImage: null,
-    processFn: () => { },
+    processFn: () => {},
   },
 
   /** 当前叠加的处理模块, { name: string; repeat: number } */
   moduleList: [],
 
   /** 当前存储的用户自定义模块 */
-  savedModuleList: window.localStorage.getItem('custom-modules') ?
-    JSON.parse(window.localStorage.getItem('custom-modules')) : [],
+  savedModuleList: window.localStorage.getItem('custom-modules')
+    ? JSON.parse(window.localStorage.getItem('custom-modules'))
+    : [],
+
+  /** 当前语言信息，默认使用本地 resource */
+  i18n: {
+    languageResourceUrl: 'http://101.43.247.72:7777/resource.json',
+    language: window.navigator.language,
+    resource: localLanguageResource,
+  },
 };
 
 export const globalContext = React.createContext();
 
 /**
- * 
- * @param {object} state 
- * @param {{ 
+ *
+ * @param {object} state
+ * @param {{
  *   type: string;
  *   payload: {
  *     url: string;
@@ -54,12 +63,7 @@ export const globalContext = React.createContext();
  * @returns state
  */
 function selectNewImageReducer(state, action) {
-  const {
-    url,
-    name,
-    fileSize,
-    imageSize,
-  } = action.payload;
+  const { url, name, fileSize, imageSize } = action.payload;
   return {
     ...state,
     imageInfo: {
@@ -75,8 +79,8 @@ function selectNewImageReducer(state, action) {
 }
 
 /**
- * 
- * @param {object} state 
+ *
+ * @param {object} state
  * @param {{ type: string; payload: WebGL2RenderingContext }} action
  * @returns state
  */
@@ -93,8 +97,8 @@ function updateCtxReducer(state, action) {
 }
 
 /**
- * 
- * @param {object} state 
+ *
+ * @param {object} state
  * @param {{
  *  type: string;
  *  payload: {
@@ -109,10 +113,7 @@ function updateCtxReducer(state, action) {
  * @returns state
  */
 function updateProcessModuleReducer(state, action) {
-  const {
-    currentImageUrl,
-    processModule,
-  } = action.payload;
+  const { currentImageUrl, processModule } = action.payload;
 
   const newModuleList = [...state.moduleList];
 
@@ -121,7 +122,10 @@ function updateProcessModuleReducer(state, action) {
     processModule.name === state.moduleList[state.moduleList.length - 1].name
   ) {
     const topModule = newModuleList[newModuleList.length - 1];
-    newModuleList[newModuleList.length - 1] = { name: topModule.name, repeat: topModule.repeat + 1 };
+    newModuleList[newModuleList.length - 1] = {
+      name: topModule.name,
+      repeat: topModule.repeat + 1,
+    };
   } else {
     newModuleList.push({ name: processModule.name, repeat: 1 });
   }
@@ -142,14 +146,14 @@ function resetModuleReducer(state, action) {
     processModule: {
       name: '',
       originImage: null,
-      processFn: () => { },
+      processFn: () => {},
     },
   };
 }
 
 /**
- * 
- * @param {object} state 
+ *
+ * @param {object} state
  * @param {{ type: string; payload: string }} action
  * @returns state
  */
@@ -161,8 +165,8 @@ function updateCurrentImageReducer(state, action) {
 }
 
 /**
- * 
- * @param {object} state 
+ *
+ * @param {object} state
  * @param {{ type: string; payload: string }} action
  * @returns state
  */
@@ -175,7 +179,7 @@ function changeModeReducer(state, action) {
 
 /**
  * 保存新的自定义处理模块
- * @param {object} state 
+ * @param {object} state
  * @param {{ type: string; payload: string }} action
  * @returns state
  */
@@ -184,7 +188,10 @@ function saveNewModuleReducer(state, action) {
   if (!state.savedModuleList.includes(action.payload)) {
     newSavedModuleList.push(action.payload);
   }
-  window.localStorage.setItem('custom-modules', JSON.stringify(newSavedModuleList));
+  window.localStorage.setItem(
+    'custom-modules',
+    JSON.stringify(newSavedModuleList)
+  );
   return {
     ...state,
     savedModuleList: newSavedModuleList,
@@ -193,18 +200,43 @@ function saveNewModuleReducer(state, action) {
 
 /**
  * 删除保存的自定义处理模块
- * @param {object} state 
+ * @param {object} state
  * @param {{ type: string; payload: string }} action
  * @returns state
  */
 function deleteModuleReducer(state, action) {
   const moduleName = action.payload;
-  const newSavedModuleList = state.savedModuleList.filter(name => name !== moduleName);
-  window.localStorage.setItem('custom-modules', JSON.stringify(newSavedModuleList));
+  const newSavedModuleList = state.savedModuleList.filter(
+    name => name !== moduleName
+  );
+  window.localStorage.setItem(
+    'custom-modules',
+    JSON.stringify(newSavedModuleList)
+  );
   return {
     ...state,
     savedModuleList: newSavedModuleList,
-  }
+  };
+}
+
+function updateResourceReducer(state, action) {
+  return {
+    ...state,
+    i18n: {
+      ...state.i18n,
+      resource: action.payload,
+    },
+  };
+}
+
+function changeLanguageReducer(state, action) {
+  return {
+    ...state,
+    i18n: {
+      ...state.i18n,
+      language: action.payload,
+    },
+  };
 }
 
 function reducer(state, action) {
@@ -225,6 +257,10 @@ function reducer(state, action) {
       return saveNewModuleReducer(state, action);
     case 'module/deleteCustom':
       return deleteModuleReducer(state, action);
+    case 'i18n/updateResource':
+      return updateResourceReducer(state, action);
+    case 'i18n/changeLanguage':
+      return changeLanguageReducer(state, action);
   }
   return state;
 }

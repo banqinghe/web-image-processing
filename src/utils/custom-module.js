@@ -5,7 +5,7 @@ function runCodeInWorker(code, pixels, width, height) {
   return new Promise(resolve => {
     window.canvasWorker.onmessage = e => {
       resolve(e.data);
-    }
+    };
 
     window.canvasWorker.postMessage({
       customCode: code,
@@ -17,17 +17,28 @@ function runCodeInWorker(code, pixels, width, height) {
 }
 
 /**
- * 在主线程中运行 
+ * 在主线程中运行
  */
 function runCodeInMainThread(code, pixels, width, height) {
-  const func = new Function('pixels', 'width', 'height', `
+  const func = new Function(
+    'pixels',
+    'width',
+    'height',
+    `
     ${code}
     if (typeof run === 'function') {
       return run(pixels, width, height);
     }
     return null;
-  `);
-  return func(pixels, width, height);
+  `
+  );
+  let result;
+  try {
+    result = func(pixels, width, height);
+  } catch (err) {
+    console.error(err);
+  }
+  return result;
 }
 
 /**
@@ -80,7 +91,7 @@ function renderAndSave(ctx, imageData, result, dispatch) {
           name: 'custom',
           originImage: null,
           processFn: null,
-        }
+        },
       },
     });
   });
@@ -88,12 +99,18 @@ function renderAndSave(ctx, imageData, result, dispatch) {
 
 /**
  * 在 Canvas 2D 上下文中运行用户自定义代码模块
- * @param {CanvasRenderingContext2D} ctx 
- * @param {string} code 
- * @param {React.DispatchWithoutAction} dispatch 
- * @param {Function} info 
+ * @param {CanvasRenderingContext2D} ctx
+ * @param {string} code
+ * @param {React.DispatchWithoutAction} dispatch
+ * @param {Function} info
  */
-async function runCustomModule(ctx, code, dispatch, showInfo, useWorker = false) {
+async function runCustomModule(
+  ctx,
+  code,
+  dispatch,
+  showInfo,
+  useWorker = false
+) {
   // --------------- PERFORMANCE TEST BEGIN: runCustomModule function ---------------
   let funcStartTime = performance.now();
 
@@ -107,24 +124,31 @@ async function runCustomModule(ctx, code, dispatch, showInfo, useWorker = false)
   // --------------- PERFORMANCE TEST BEGIN: run custom code ---------------
   let runCustomCodeStartTime = performance.now();
 
-  const result = useWorker ?
-    await runCodeInWorker(code, pixels, width, height) :
-    runCodeInMainThread(code, pixels, width, height);
+  const result = useWorker
+    ? await runCodeInWorker(code, pixels, width, height)
+    : runCodeInMainThread(code, pixels, width, height);
 
-  console.log('run custom module ' + (useWorker ? 'with worker' : 'without worker'),
-    '- duration:', performance.now() - runCustomCodeStartTime);
+  console.log(
+    'run custom module ' + (useWorker ? 'with worker' : 'without worker'),
+    '- duration:',
+    performance.now() - runCustomCodeStartTime
+  );
   // ----------------------- PERFORMANCE TEST END -----------------------
 
   if (!result) {
     if (showInfo) {
-      showInfo(`自定义文件中缺少 run() 函数`);
+      showInfo(`自定义文件中缺少 run() 函数或运行错误`);
     }
     return;
   }
   renderAndSave(ctx, imageData, result, dispatch);
 
-  console.log('runCustomModule function ' + (useWorker ? 'with worker' : 'without worker'),
-    '- duration:', performance.now() - funcStartTime);
+  console.log(
+    'runCustomModule function ' +
+      (useWorker ? 'with worker' : 'without worker'),
+    '- duration:',
+    performance.now() - funcStartTime
+  );
   // ----------------------- PERFORMANCE TEST END -----------------------
 }
 

@@ -1,7 +1,8 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import './index.css'
-import App from './App'
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import App from './App';
+import { GlobalProvider } from './store';
 
 import { registerSW } from 'virtual:pwa-register';
 import CanvasWorker from './canvas-worker?worker';
@@ -11,24 +12,26 @@ const intervalMS = 60 * 60 * 1000;
 const updateSW = registerSW({
   // automatically update every hour
   onRegistered(r) {
-    r && setInterval(() => {
-      r.update()
-    }, intervalMS)
+    r &&
+      setInterval(() => {
+        r.update();
+      }, intervalMS);
   },
   onNeedRefresh() {
-    if(window.confirm('confirm to refresh')) {
+    if (window.confirm('confirm to refresh')) {
       updateSW();
     }
   },
   onOfflineReady() {
     console.log('offline ready');
-    // alert('offline ready')
   },
 });
 
 window.canvasWorker = new CanvasWorker();
 
 ReactDOM.render(
-  <App />,
+  <GlobalProvider>
+    <App />
+  </GlobalProvider>,
   document.getElementById('root')
-)
+);

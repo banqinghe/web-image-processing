@@ -3,13 +3,18 @@
   align-items: center;
   height: 20px;
   box-sizing: border-box;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--divider-bg);
+  background: var(--bg-color);
 }
 
 .header-logo {
   width: 15px;
   height: 15px;
   margin: 0 4px;
+}
+
+.dark .header-logo {
+  filter: invert(1);
 }
 
 .header-menu-list {
@@ -30,29 +35,57 @@
   padding: 2px 10px;
   line-height: 15px;
   font-size: 13px;
+  background: var(--header-btn-bg);
 }
 
 .header-menu-item > button:hover {
-  background: #efefef;
+  background: var(--header-btn-hover-bg);
 }
 
 .header-submenu {
   position: absolute;
   top: 20px;
   width: max-content;
-  background: #fff;
+  background: var(--bg-color);
   border: 1px solid #eee;
   font-size: 13px;
   z-index: 1000;
 }
 
-.header-submenu-item > button {
+.recent-file-list > button,
+.header-submenu-item > button,
+.header-submenu-item > label {
+  display: block;
   width: 100%;
   padding: 4px 14px;
   font-size: 13px;
   text-align: left;
+  background: var(--header-btn-bg);
 }
 
-.header-submenu-item > button:hover {
-  background: #efefef;
+.header-submenu-item > button:hover,
+.header-submenu-item > label:hover {
+  background: var(--header-btn-hover-bg);
+  cursor: pointer;
+}
+
+.header-submenu-item .recent-file-list {
+  position: absolute;
+  left: 129px;
+  top: 30px;
+  width: max-content;
+  background: var(--bg-color);
+  border: 1px solid #efefef;
+}
+
+.header-submenu-item .recent-file-list > button {
+  display: block;
+  padding: 4px 14px;
+  width: 100%;
+  text-align: left;
+  border-bottom: 1px solid var(--btn-hover-bg);
+}
+
+.header-submenu-item .recent-file-list > button:hover {
+  background: var(--btn-hover-bg);
 }

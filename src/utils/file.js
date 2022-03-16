@@ -1,3 +1,42 @@
+/**
+ * 从文件系统中获取指定类型的文件的 Handle
+ */
+async function getFileFromFileSystem(types) {
+  const [fileHandle] = await window.showOpenFilePicker({
+    types: types ?? [{ description: 'All', accept: { '*/*': ['*'] } }],
+    excludeAcceptAllOption: true,
+  });
+  return fileHandle;
+}
+
+/**
+ * 将文本或图片保存至本地
+ */
+async function saveFileToFileSystem(content, type, suggestedName) {
+  const options = {
+    suggestedName:
+      suggestedName ?? (type === 'image' ? 'image-result' : 'canvas-script'),
+    types: [
+      {
+        description: 'Image',
+        accept: { 'image/png': ['.png'], 'image/jpg': ['.jpg', '.jpeg'] },
+      },
+      {
+        description: 'JavaScript Files',
+        accept: { 'application/javascript': ['.js'] },
+      },
+      {
+        description: 'Text Files',
+        accept: { 'text/plain': ['.txt'] },
+      },
+    ],
+  };
+  const fileHandle = await window.showSaveFilePicker(options);
+  const writable = await fileHandle.createWritable();
+  await writable.write(content);
+  await writable.close();
+}
+
 async function getNewFileHandle(suggestedName) {
   const options = {
     suggestedName: suggestedName,
@@ -6,7 +45,7 @@ async function getNewFileHandle(suggestedName) {
         description: 'JavaScript Files',
         accept: {
           'application/javascript': ['.js'],
-        }
+        },
       },
       {
         description: 'Text Files',
@@ -21,12 +60,14 @@ async function getNewFileHandle(suggestedName) {
 }
 
 async function writeFile(fileHandle, contents) {
-  // Create a FileSystemWritableFileStream to write to.
   const writable = await fileHandle.createWritable();
-  // Write the contents of the file to the stream.
   await writable.write(contents);
-  // Close the file and write the contents to disk.
   await writable.close();
 }
 
-export { getNewFileHandle, writeFile };
+export {
+  getNewFileHandle,
+  writeFile,
+  getFileFromFileSystem,
+  saveFileToFileSystem,
+};

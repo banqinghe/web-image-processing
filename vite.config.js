@@ -1,7 +1,7 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
 import monacoEditorPlugin from 'vite-plugin-monaco-editor';
-import { VitePWA } from 'vite-plugin-pwa'
+import { VitePWA } from 'vite-plugin-pwa';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -10,7 +10,12 @@ export default defineConfig({
     monacoEditorPlugin(),
     VitePWA({
       srcDir: 'src',
-      includeAssets: ['favicon.svg', 'favicon.ico', 'robots.txt', 'apple-touch-icon.png'],
+      includeAssets: [
+        'favicon.svg',
+        'favicon.ico',
+        'robots.txt',
+        'apple-touch-icon.png',
+      ],
       manifest: {
         name: 'Canvas Image',
         short_name: 'Canvas Image',
@@ -32,8 +37,8 @@ export default defineConfig({
             sizes: '512x512',
             type: 'image/png',
             purpose: 'any maskable',
-          }
-        ]
+          },
+        ],
       },
       strategies: 'injectManifest',
       registerType: 'autoUpdate',
@@ -42,8 +47,8 @@ export default defineConfig({
       // },
       injectManifest: {
         maximumFileSizeToCacheInBytes: 52428800,
-        globPatterns: ["**\/*.{js,css,html,png,svg,jpg,jpeg}"]
+        globPatterns: ['**/*.{js,css,html,png,svg,jpg,jpeg}'],
       },
     }),
   ],
-})
+});

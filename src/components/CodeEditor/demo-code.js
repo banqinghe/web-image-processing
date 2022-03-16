@@ -5,7 +5,6 @@ function run(pixels, width, height) {
       pixels[i][j].r = 255 - pixels[i][j].r;
       pixels[i][j].g = 255 - pixels[i][j].g;
       pixels[i][j].b = 255 - pixels[i][j].b;
-      pixels[i][j].a = pixels[i][j].a;
     }
   }
   return pixels;
