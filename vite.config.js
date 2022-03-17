@@ -1,11 +1,13 @@
-import { defineConfig } from 'vite';
+import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
 import monacoEditorPlugin from 'vite-plugin-monaco-editor';
 import { VitePWA } from 'vite-plugin-pwa';
+import analyze from 'rollup-plugin-analyzer';
 
-// https://vitejs.dev/config/
-export default defineConfig({
-  plugins: [
+export default ({ mode }) => {
+  process.env = { ...process.env, ...loadEnv(mode, process.cwd()) };
+
+  const basePlugins = [
     react(),
     monacoEditorPlugin(),
     VitePWA({
@@ -42,13 +44,21 @@ export default defineConfig({
       },
       strategies: 'injectManifest',
       registerType: 'autoUpdate',
-      // workbox: {
-      //   maximumFileSizeToCacheInBytes: 52428800,
-      // },
       injectManifest: {
         maximumFileSizeToCacheInBytes: 52428800,
         globPatterns: ['**/*.{js,css,html,png,svg,jpg,jpeg}'],
       },
     }),
-  ],
-});
+  ];
+
+  if (process.env.VITE_IS_ANALYZE) {
+    basePlugins.push(analyze());
+  }
+
+  return defineConfig({
+    plugins: basePlugins,
+    build: {
+      chunkSizeWarningLimit: 5120,
+    },
+  });
+};
