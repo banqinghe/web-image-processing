@@ -155,10 +155,10 @@ function HeaderMenu() {
           >
             <li className="header-submenu-item">
               {window.indexedDB ? (
-                <button onClick={handleImportImage}>{t('New Image')}}</button>
+                <button onClick={handleImportImage}>{t('New Image')}</button>
               ) : (
                 <label for="new-image">
-                  {t('New Image')}}
+                  {t('New Image')}
                   <input
                     type="file"
                     name="new-image"

@@ -3,8 +3,11 @@ import { useEffect, useRef } from 'react';
 import './index.css';
 
 function VerticalResizable(props) {
+  console.log('rerender resizable');
   const { children, defaultHeightList, dividerText } = props;
-  const elementRefList = Array.from({ length: children.length }, () => useRef());
+  const elementRefList = Array.from({ length: children.length }, () =>
+    useRef()
+  );
 
   const heightInfo = useRef({
     containerHeight: -1,
@@ -20,25 +23,36 @@ function VerticalResizable(props) {
   });
 
   useEffect(() => {
-    const containerHeight = document.querySelector('.vertical-resizable').getBoundingClientRect().height;
-    const dividerHeight = document.querySelector('.vertical-divider').getBoundingClientRect().height;
+    const containerHeight = document
+      .querySelector('.vertical-resizable')
+      .getBoundingClientRect().height;
+    const dividerHeight = document
+      .querySelector('.vertical-divider')
+      .getBoundingClientRect().height;
     heightInfo.current.containerHeight = containerHeight;
     heightInfo.current.dividerHeight = dividerHeight;
 
-    const itemAverageHeight = (containerHeight - (children.length - 1) * dividerHeight) / children.length;
+    const itemAverageHeight =
+      (containerHeight - (children.length - 1) * dividerHeight) /
+      children.length;
     elementRefList.forEach((elementRef, index) => {
       if (defaultHeightList) {
         elementRef.current.style.height = defaultHeightList[index];
         return;
       }
-      elementRef.current.style.height = (
-        index < children.length - 1 ? itemAverageHeight + dividerHeight : itemAverageHeight
-      ) / containerHeight * 100 + '%';
+      elementRef.current.style.height =
+        ((index < children.length - 1
+          ? itemAverageHeight + dividerHeight
+          : itemAverageHeight) /
+          containerHeight) *
+          100 +
+        '%';
     });
-  }, [children]);
+  }, []);
 
   function resizeItem(e) {
-    if (!movingInfo.current.isMoving ||
+    if (
+      !movingInfo.current.isMoving ||
       e.clientY <= movingInfo.current.farTop ||
       e.clientY >= movingInfo.current.farBottom
     ) {
@@ -46,10 +60,10 @@ function VerticalResizable(props) {
     }
     const newLeftHeight = e.clientY - movingInfo.current.farTop;
     const newRightHeight = movingInfo.current.farBottom - e.clientY;
-    elementRefList[movingInfo.current.topIndex].current.style.height = 
-      newLeftHeight / heightInfo.current.containerHeight * 100 + '%';
+    elementRefList[movingInfo.current.topIndex].current.style.height =
+      (newLeftHeight / heightInfo.current.containerHeight) * 100 + '%';
     elementRefList[movingInfo.current.bottomIndex].current.style.height =
-      newRightHeight / heightInfo.current.containerHeight * 100 + '%';
+      (newRightHeight / heightInfo.current.containerHeight) * 100 + '%';
   }
 
   function resizeFinish() {
@@ -60,7 +74,11 @@ function VerticalResizable(props) {
   const toRender = [];
   children.forEach((element, index) => {
     toRender.push(
-      <div className="vertical-item" key={index * 2} ref={elementRefList[index]}>
+      <div
+        className="vertical-item"
+        key={index * 2}
+        ref={elementRefList[index]}
+      >
         {element}
       </div>
     );
@@ -70,11 +88,16 @@ function VerticalResizable(props) {
           className="vertical-divider"
           key={index * 2 + 1}
           onMouseDown={() => {
-            const topIndex = index, bottomIndex = index + 1;
+            const topIndex = index,
+              bottomIndex = index + 1;
             movingInfo.current.topIndex = topIndex;
             movingInfo.current.bottomIndex = bottomIndex;
-            movingInfo.current.farTop = elementRefList[topIndex].current.getBoundingClientRect().top;
-            movingInfo.current.farBottom = elementRefList[bottomIndex].current.getBoundingClientRect().bottom;
+            movingInfo.current.farTop =
+              elementRefList[topIndex].current.getBoundingClientRect().top;
+            movingInfo.current.farBottom =
+              elementRefList[
+                bottomIndex
+              ].current.getBoundingClientRect().bottom;
             movingInfo.current.isMoving = true;
             window.addEventListener('mousemove', resizeItem);
             window.addEventListener('mouseup', resizeFinish, { once: true });
@@ -86,11 +109,7 @@ function VerticalResizable(props) {
     }
   });
 
-  return (
-    <div className="vertical-resizable">
-      {toRender}
-    </div>
-  );
+  return <div className="vertical-resizable">{toRender}</div>;
 }
 
 export default VerticalResizable;
