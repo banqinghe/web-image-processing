@@ -4,10 +4,10 @@ import { globalContext } from '../../store';
 import './index.css';
 
 const componentMap = {
-  grayscale: React.lazy(() => import('../../canvas/grayscale/Support')),
-  thresholding: React.lazy(() => import('../../canvas/thresholding/Support')),
-  blur: React.lazy(() => import('../../canvas/blur/Support')),
-  sharpen: React.lazy(() => import('../../canvas/sharpen/Support')),
+  Grayscale: React.lazy(() => import('../../canvas/grayscale/Support')),
+  Thresholding: React.lazy(() => import('../../canvas/thresholding/Support')),
+  Blur: React.lazy(() => import('../../canvas/blur/Support')),
+  Sharpen: React.lazy(() => import('../../canvas/sharpen/Support')),
 };
 
 function SupportComponentContainer() {

@@ -5,12 +5,14 @@ import { getNewFileHandle, writeFile } from '../../utils/file';
 import { monaco } from '../../monaco-editor';
 import { setCustomModule } from '../../utils/idb';
 import { runCustomModule } from '../../utils/custom-module';
+import { getText } from '../../i18n';
 import demoCode from './demo-code?raw';
 
 import './index.css';
 
 function CodeEditor() {
   const { state, dispatch } = useContext(globalContext);
+  const t = getText(state.i18n);
 
   const isRunnable = state.mode === 'canvas' ? true : false;
 
@@ -65,7 +67,7 @@ function CodeEditor() {
           className={'run ' + (isRunnable ? '' : 'disable')}
           onClick={handleClickRun}
         >
-          运行
+          {t('Run')}
         </button>
         <Popover
           overlayClassName="save-code-popover"
@@ -73,30 +75,30 @@ function CodeEditor() {
           trigger="click"
           content={
             <div className="popover-card">
-              <button onClick={handleClickSaveAsFile}>文件</button>
+              <button onClick={handleClickSaveAsFile}>{t('File')}</button>
               <button onClick={() => setSaveModalVisible(true)}>
-                自定义模块
+                {t('Custom Module')}
               </button>
             </div>
           }
         >
           <button type="button" className="save">
-            保存为
+            {t('Save As')}
           </button>
         </Popover>
       </div>
 
       <Modal
-        title="保存为自定义模块"
+        title={t('Save As A Custom Module')}
         visible={saveModalVisible}
         width={300}
-        okText="确认"
+        okText={t('OK')}
         onOk={handleClickSaveAsModule}
-        cancelText="取消"
+        cancelText={t('Cancel')}
         onCancel={() => setSaveModalVisible(false)}
       >
         <Input
-          placeholder="模块名称"
+          placeholder={t('Module Name')}
           value={customModuleName}
           onChange={e => setCustomModuleName(e.target.value)}
         />

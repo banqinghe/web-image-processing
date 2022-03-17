@@ -4,24 +4,13 @@ import { globalContext } from '../../store';
 import { loadImage } from '../../canvas/utils';
 import renderImageGl from '../../canvas/render-image';
 import renderImageCanvas from '../../canvas/render-canvas';
+import { getText } from '../../i18n';
 
 import './index.css';
 
-const moduleChineseNameDict = {
-  'grayscale': '转灰度',
-  'thresholding': '二值化',
-  'invert-color': '反色',
-  'sobel': 'Sobel 边缘检测',
-  'prewitt': 'Prewitt 边缘检测',
-  'dilation': '膨胀',
-  'erosion': '腐蚀',
-  'blur': '模糊',
-  'sharpen': '锐化',
-  'custom': '编辑器自定义',
-};
-
 function WebGLCanvas() {
   const { state, dispatch } = useContext(globalContext);
+  const t = getText(state.i18n);
 
   const canvasRef = useRef(null);
   const canvasContainerRef = useRef(null);
@@ -42,8 +31,9 @@ function WebGLCanvas() {
     if (canvasRef.current) {
       canvasRef.current.remove();
     }
-    canvasRef.current =
-      canvasContainerRef.current.appendChild(document.createElement('canvas'));
+    canvasRef.current = canvasContainerRef.current.appendChild(
+      document.createElement('canvas')
+    );
     canvasRef.current.id = 'render-canvas';
 
     const containerRect = canvasContainerRef.current.getBoundingClientRect();
@@ -58,15 +48,19 @@ function WebGLCanvas() {
     canvasRef.current.width = width;
     canvasRef.current.height = height;
     const paddingScaleRadio = 0.9;
-    canvasRef.current.style.width = width * scaleRadio * paddingScaleRadio + 'px';
-    canvasRef.current.style.height = height * scaleRadio * paddingScaleRadio + 'px';
+    canvasRef.current.style.width =
+      width * scaleRadio * paddingScaleRadio + 'px';
+    canvasRef.current.style.height =
+      height * scaleRadio * paddingScaleRadio + 'px';
 
     let ctx;
     if (state.mode === 'canvas') {
       ctx = canvasRef.current.getContext('2d');
       renderImageCanvas(ctx, image);
     } else {
-      ctx = canvasRef.current.getContext('webgl2', { preserveDrawingBuffer: true });
+      ctx = canvasRef.current.getContext('webgl2', {
+        preserveDrawingBuffer: true,
+      });
       renderImageGl(ctx, image);
     }
 
@@ -77,18 +71,14 @@ function WebGLCanvas() {
         ctx,
       },
     });
-  };
+  }
 
   function renderOriginImage() {
-    loadImage(state.imageInfo.url)
-      .then(updateCanvasDom)
-      .catch(console.error);
+    loadImage(state.imageInfo.url).then(updateCanvasDom).catch(console.error);
   }
 
   function renderCurrentImage() {
-    loadImage(state.currentImageUrl)
-      .then(updateCanvasDom)
-      .catch(console.error);
+    loadImage(state.currentImageUrl).then(updateCanvasDom).catch(console.error);
   }
 
   function resetModule() {
@@ -106,22 +96,30 @@ function WebGLCanvas() {
     <div className="process-window">
       <div id="canvas-container" ref={canvasContainerRef}>
         {/* <canvas id="render-canvas" /> */}
-        <div className={'origin-image-mask' + (originImageVisible ? ' visible' : '')}>
+        <div
+          className={
+            'origin-image-mask' + (originImageVisible ? ' visible' : '')
+          }
+        >
           <img
-            width={canvasRef.current ? canvasRef.current.style.width : undefined}
+            width={
+              canvasRef.current ? canvasRef.current.style.width : undefined
+            }
             src={state.imageInfo.url}
-            alt="原图"
+            alt="origin image"
           />
         </div>
         <div className="image-info-bar">
-          <span title="文件名">{state.imageInfo.name}</span>
-          <span title="文件大小">{Math.round(state.imageInfo.fileSize / 2 ** 10) + ' KB'}</span>
-          <span title="图片尺寸">{state.imageInfo.imageSize}</span>
+          <span title={t('File Name')}>{state.imageInfo.name}</span>
+          <span title={t('File Size')}>
+            {Math.round(state.imageInfo.fileSize / 2 ** 10) + ' KB'}
+          </span>
+          <span title={t('Image Size')}>{state.imageInfo.imageSize}</span>
         </div>
       </div>
       <div className="canvas-info-sidebar">
         <div className="info-item origin-image-switch">
-          <span className="info-item-title">对比原图:</span>
+          <span className="info-item-title">{t('Compare to Origin')}:</span>
           <Switch
             size="small"
             checked={originImageVisible}
@@ -129,7 +127,7 @@ function WebGLCanvas() {
           />
         </div>
         <div className="info-item">
-          <span className="info-item-title">渲染模式:</span>
+          <span className="info-item-title">{t('Render Mode')}:</span>
           <div>
             <Radio.Group
               value={state.mode}
@@ -144,16 +142,20 @@ function WebGLCanvas() {
           </div>
         </div>
         <div className="info-item module-list">
-          <p>处理模块: {state.moduleList.length ? '' : '无'}</p>
+          <p>
+            {t('Process Module')}: {state.moduleList.length ? '' : t('None')}
+          </p>
           <ul>
             {state.moduleList.map((module, index) => (
               <li key={index}>
-                {moduleChineseNameDict[module.name] ?? module.name}
+                {t(module.name)}
                 {module.repeat > 1 ? ' (×' + module.repeat + ')' : ''}
               </li>
             ))}
           </ul>
-          <button className="reset-btn" onClick={resetModule}>重置</button>
+          <button className="reset-btn" onClick={resetModule}>
+            {t('Reset')}
+          </button>
         </div>
       </div>
     </div>

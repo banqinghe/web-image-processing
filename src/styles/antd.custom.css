@@ -1,0 +1,37 @@
+.dark .ant-modal-content {
+  background: var(--bg-color);
+  color: var(--text-color);
+}
+
+.dark .ant-modal-header {
+  background: var(--bg-color);
+}
+
+.dark .ant-modal-header,
+.dark .ant-modal-footer {
+  border-color: var(--divider-bg);
+}
+
+.dark .ant-modal-title {
+  color: var(--text-color);
+}
+
+.dark .ant-modal-close-icon {
+  color: var(--text-color);
+}
+
+.dark .ant-btn-primary {
+  border: none;
+  background: var(--btn-bg);
+}
+
+.dark .ant-message-notice-content {
+  background: #444;
+  color: var(--text-color);
+}
+
+.ant-input {
+  background: var(--input-bg);
+  color: var(--text-bg);
+  border: none;
+}

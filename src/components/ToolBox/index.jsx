@@ -16,16 +16,21 @@ import { loadImage } from '../../canvas/utils';
 import { runCustomModule } from '../../utils/custom-module';
 import { deleteCustomModule, getCustomModule } from '../../utils/idb';
 import { climbToWindow } from '../../utils/dom';
+import { getText } from '../../i18n';
 
 import './index.css';
 
+/**
+ * WebGL 处理模块功能按钮
+ */
 function FunctionButton(props) {
   const { text, processFn, moduleName } = props;
   const { state, dispatch } = useContext(globalContext);
+  const t = getText(state.i18n);
 
   function handleClick() {
     if (state.mode !== 'webgl') {
-      message.info('预设模块需在 WebGL 模式执行');
+      message.info(t('Preset modules need to be executed in WebGL mode'));
       return;
     }
     loadImage(state.currentImageUrl)
@@ -68,9 +73,14 @@ function FunctionButton(props) {
   );
 }
 
+/**
+ * 自定义模块按钮的 context menu
+ */
 function ModuleContextMenu(props) {
-  const { visible, moduleName, x, y } = props.status;
+  const { visible, x, y } = props.status;
   const { onCancel, onDelete, onImport, onExecute } = props;
+  const { state } = useContext(globalContext);
+  const t = getText(state.i18n);
 
   function handleClickWindow(e) {
     climbToWindow(
@@ -92,16 +102,20 @@ function ModuleContextMenu(props) {
       className={'module-context-menu' + (visible ? ' visible' : '')}
       style={{ top: y, left: x }}
     >
-      <button onClick={onExecute}>执行</button>
-      <button onClick={onDelete}>删除</button>
-      <button onClick={onImport}>显示源代码</button>
+      <button onClick={onExecute}>{t('Execute')}</button>
+      <button onClick={onDelete}>{t('Delete')}</button>
+      <button onClick={onImport}>{t('Display Source')}</button>
     </div>,
     document.body
   );
 }
 
+/**
+ * 工具栏
+ */
 function ToolBox() {
   const { state, dispatch } = useContext(globalContext);
+  const t = getText(state.i18n);
 
   const [contextMenu, setContextMenu] = useState({
     visible: false,
@@ -118,7 +132,7 @@ function ToolBox() {
     }
 
     if (state.mode !== 'canvas') {
-      message.info('自定义模块需在 Canvas 模式执行');
+      message.info(t('Custom modules need to be executed in Canvas mode'));
       return;
     }
 
@@ -149,68 +163,68 @@ function ToolBox() {
 
   return (
     <div className="toolbox">
-      <div className="toolbox-title">工具栏</div>
+      <div className="toolbox-title">{t('Tool Bar')}</div>
       <ul>
         <li>
           <FunctionButton
-            text="转灰度"
+            text={t('Grayscale')}
             processFn={grayscale}
-            moduleName="grayscale"
+            moduleName="Grayscale"
           />
         </li>
         <li>
           <FunctionButton
-            text="二值化"
+            text={t('Thresholding')}
             processFn={thresholding}
-            moduleName="thresholding"
+            moduleName="Thresholding"
           />
         </li>
         <li>
           <FunctionButton
-            text="反色"
+            text={t('Invert Color')}
             processFn={invertColor}
-            moduleName="invert-color"
+            moduleName="Invert Color"
           />
         </li>
         <li>
-          <FunctionButton text="Sobel" processFn={sobel} moduleName="sobel" />
+          <FunctionButton text="Sobel" processFn={sobel} moduleName="Sobel" />
         </li>
         <li>
           <FunctionButton
             text="Prewitt"
             processFn={prewitt}
-            moduleName="prewitt"
+            moduleName="Prewitt"
           />
         </li>
         <li>
           <FunctionButton
-            text="膨胀"
+            text={t('Dilation')}
             processFn={dilation}
-            moduleName="dilation"
+            moduleName="Dilation"
           />
         </li>
         <li>
           <FunctionButton
-            text="腐蚀"
+            text={t('Erosion')}
             processFn={erosion}
-            moduleName="erosion"
+            moduleName="Erosion"
           />
         </li>
         <li>
-          <FunctionButton text="模糊" processFn={blur} moduleName="blur" />
+          <FunctionButton text={t('Blur')} processFn={blur} moduleName="Blur" />
         </li>
         <li>
           <FunctionButton
-            text="锐化"
+            text={t('Sharpen')}
             processFn={sharpen}
-            moduleName="sharpen"
+            moduleName="Sharpen"
           />
         </li>
       </ul>
 
       {state.savedModuleList.length > 0 && (
         <div className="custom-module-title">
-          <span>自定义模块</span>
+          <span>{t('Custom Module')}</span>
         </div>
       )}
       <ul id="saved-module-list">

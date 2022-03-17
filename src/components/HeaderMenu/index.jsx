@@ -146,6 +146,7 @@ function HeaderMenu() {
     <div className="header-menu">
       <img src={logoUrl} className="header-logo" alt="header-logo" />
       <ul className="header-menu-list">
+        {/* 文件导入 */}
         <li className="header-menu-item">
           <button onClick={() => setActiveItem('file')}>{t('File')}</button>
           <ul
@@ -154,10 +155,10 @@ function HeaderMenu() {
           >
             <li className="header-submenu-item">
               {window.indexedDB ? (
-                <button onClick={handleImportImage}>导入新图片</button>
+                <button onClick={handleImportImage}>{t('New Image')}}</button>
               ) : (
                 <label for="new-image">
-                  导入新图片
+                  {t('New Image')}}
                   <input
                     type="file"
                     name="new-image"
@@ -182,7 +183,7 @@ function HeaderMenu() {
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
             >
-              <button>导入最近使用图片</button>
+              <button>{t('Recent Images')}</button>
               <div
                 className="recent-file-list"
                 style={{ display: recentFileVisible ? 'block' : 'none' }}
@@ -198,12 +199,18 @@ function HeaderMenu() {
               </div>
             </li>
             <li className="header-submenu-item">
-              <button onClick={handleImportModule}>导入自定义模块</button>
+              <button onClick={handleImportModule}>
+                {t('Import Custom Module')}
+              </button>
             </li>
           </ul>
         </li>
+
+        {/* 语言切换 */}
         <li className="header-menu-item">
-          <button onClick={() => setActiveItem('language')}>语言</button>
+          <button onClick={() => setActiveItem('language')}>
+            {t('Language')}
+          </button>
           <ul
             className="header-submenu"
             style={{ display: activeItem === 'language' ? 'block' : 'none' }}
@@ -216,24 +223,28 @@ function HeaderMenu() {
             </li>
             <li className="header-submenu-item">
               <button onClick={() => changeLanguage(window.navigator.language)}>
-                跟随系统
+                {t('Follow System')}
               </button>
             </li>
           </ul>
         </li>
+
+        {/* 颜色主题切换 */}
         <li className="header-menu-item">
-          <button onClick={() => setActiveItem('theme')}>主题</button>
+          <button onClick={() => setActiveItem('theme')}>{t('Theme')}</button>
           <ul
             className="header-submenu"
             style={{ display: activeItem === 'theme' ? 'block' : 'none' }}
           >
             <li className="header-submenu-item">
               <button onClick={() => changeColorTheme('light')}>
-                浅色模式
+                {t('Light')}
               </button>
             </li>
             <li className="header-submenu-item">
-              <button onClick={() => changeColorTheme('dark')}>暗色模式</button>
+              <button onClick={() => changeColorTheme('dark')}>
+                {t('Dark')}
+              </button>
             </li>
             <li className="header-submenu-item">
               <button
@@ -246,14 +257,16 @@ function HeaderMenu() {
                   )
                 }
               >
-                跟随系统
+                {t('Follow System')}
               </button>
             </li>
           </ul>
         </li>
+
+        {/* 关于 */}
         <li className="header-menu-item">
           <button onClick={() => console.log('canvas image by bqh')}>
-            关于
+            {t('About')}
           </button>
         </li>
       </ul>
