@@ -3,7 +3,6 @@ import { useEffect, useRef } from 'react';
 import './index.css';
 
 function VerticalResizable(props) {
-  console.log('rerender resizable');
   const { children, defaultHeightList, dividerText } = props;
   const elementRefList = Array.from({ length: children.length }, () =>
     useRef()
