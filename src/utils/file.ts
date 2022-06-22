@@ -1,7 +1,9 @@
+// TypeScript has some wrong with File System Access API
+
 /**
  * 从文件系统中获取指定类型的文件的 Handle
  */
-async function getFileFromFileSystem(types) {
+export async function getFileFromFileSystem(types: any[]) {
   const [fileHandle] = await window.showOpenFilePicker({
     types: types ?? [{ description: 'All', accept: { '*/*': ['*'] } }],
     excludeAcceptAllOption: true,
@@ -12,7 +14,11 @@ async function getFileFromFileSystem(types) {
 /**
  * 将文本或图片保存至本地
  */
-async function saveFileToFileSystem(content, type, suggestedName) {
+export async function saveFileToFileSystem(
+  content: string,
+  type: string,
+  suggestedName: string
+) {
   const options = {
     suggestedName:
       suggestedName ?? (type === 'image' ? 'image-result' : 'canvas-script'),
@@ -37,9 +43,9 @@ async function saveFileToFileSystem(content, type, suggestedName) {
   await writable.close();
 }
 
-async function getNewFileHandle(suggestedName) {
+export async function getNewFileHandle(suggestedName: string) {
   const options = {
-    suggestedName: suggestedName,
+    suggestedName,
     types: [
       {
         description: 'JavaScript Files',
@@ -59,15 +65,11 @@ async function getNewFileHandle(suggestedName) {
   return handle;
 }
 
-async function writeFile(fileHandle, contents) {
+export async function writeFile(
+  fileHandle: FileSystemFileHandle,
+  contents: string
+) {
   const writable = await fileHandle.createWritable();
   await writable.write(contents);
   await writable.close();
 }
-
-export {
-  getNewFileHandle,
-  writeFile,
-  getFileFromFileSystem,
-  saveFileToFileSystem,
-};

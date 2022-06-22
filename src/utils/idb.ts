@@ -8,7 +8,7 @@ const fileSumLimit = 10;
 /**
  * 添加新的自定义模块代码
  */
-function setCustomModule(name, code) {
+export function setCustomModule(name: string, code: string) {
   if (window.indexedDB) {
     return set(modulePrefix + name, code);
   } else {
@@ -19,7 +19,7 @@ function setCustomModule(name, code) {
 /**
  * 获取曾经已保存的模块代码
  */
-function getCustomModule(name) {
+export function getCustomModule(name: string) {
   if (window.indexedDB) {
     return get(modulePrefix + name);
   } else {
@@ -33,7 +33,7 @@ function getCustomModule(name) {
 /**
  * 删除保存的模块
  */
-function deleteCustomModule(name) {
+export function deleteCustomModule(name: string) {
   if (window.indexedDB) {
     return del(modulePrefix + name);
   } else {
@@ -44,7 +44,7 @@ function deleteCustomModule(name) {
 /**
  * 向最近打开文件 handle 列表中添加新 handle，新的项添加至队首
  */
-function saveFileHandleList(handle) {
+export function saveFileHandleList(handle: FileSystemFileHandle) {
   get(fileHandleKey).then(list => {
     if (!list) {
       set(fileHandleKey, [handle]);
@@ -64,15 +64,18 @@ function saveFileHandleList(handle) {
 /**
  * 获取现有 handle
  */
-function getFileHandleList() {
+export function getFileHandleList() {
   return get(fileHandleKey);
 }
 
 /**
  * 获取 handle 内容权限
  */
-async function verifyPermission(fileHandle, readWrite) {
-  const options = {};
+export async function verifyPermission(
+  fileHandle: FileSystemFileHandle,
+  readWrite: boolean
+) {
+  const options = { mode: 'read' };
   if (readWrite) {
     options.mode = 'readwrite';
   }
@@ -84,12 +87,3 @@ async function verifyPermission(fileHandle, readWrite) {
   }
   return false;
 }
-
-export {
-  setCustomModule,
-  getCustomModule,
-  deleteCustomModule,
-  saveFileHandleList,
-  getFileHandleList,
-  verifyPermission,
-};
