@@ -1,5 +1,6 @@
-@import './styles/color.variable.css';
-@import './styles/antd.custom.css';
+:root {
+  --header-height: 20px;
+}
 
 body {
   color: var(--text-color);
@@ -31,4 +32,14 @@ p {
 .main-body {
   width: 100vw;
   height: calc(100vh - 20px);
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(193, 193, 193, 0.6);
+  border-radius: 1000px;
 }
