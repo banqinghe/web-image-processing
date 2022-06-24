@@ -1,5 +1,5 @@
 function getText({ language, resource }) {
-  return function (key) {
+  return function (key: string) {
     return resource[language][key] ?? key;
   };
 }

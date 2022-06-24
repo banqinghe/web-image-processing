@@ -3,7 +3,7 @@
  */
 export function climbToWindow(
   element: Element | null,
-  isBlock: (element: Element | null) => boolean,
+  isBlock: (element: Element) => boolean,
   callback: (element: Element | null) => any
 ) {
   while (element) {
