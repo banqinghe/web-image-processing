@@ -1,24 +1,20 @@
 import { Slider } from 'antd';
+import { SupportComponentProps } from '../types';
 
-function Support(props) {
-  const {
-    ctx,
-    image,
-    processFn,
-    handleProcessComplete,
-  } = props;
+function Support(props: SupportComponentProps) {
+  const { ctx, image, processFn, onProcessComplete } = props;
 
-  function handleChange(value) {
+  const handleChange = (value: number) => {
     setTimeout(() => {
       processFn(ctx, image, value);
-      handleProcessComplete();
+      onProcessComplete();
     }, 0);
-  }
+  };
 
   return (
     <Slider
       tooltipVisible={false}
-      style={{width: '70%'}}
+      style={{ width: '70%' }}
       defaultValue={10}
       min={1}
       max={40}
